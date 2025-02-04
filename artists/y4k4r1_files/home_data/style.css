@@ -1,0 +1,39 @@
+body {
+	background: yellow;
+	overflow-x: hidden;
+	padding: 6px;
+	font-family: Consolas, monospace;
+	font-size: 12px;
+}
+
+img, video, audio {
+	max-width: 100%;
+}
+
+h1, h2, h3 {
+	font-size: 16px;
+	font-weight: normal;
+	position: relative;
+	padding: 0;
+	margin: 0;
+	border: 1px solid black;
+	border-left: 4px solid black;
+	background: orange;
+}
+
+h1 {
+}
+
+h2 {
+	display: inline-block;
+	font-size: 12px;
+}
+
+/*h1:after {
+	content: "//";
+	color: red;
+	font-weight: bold;
+	position: absolute;
+	right: 0;
+	top: 3px;
+}*/

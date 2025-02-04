@@ -1,0 +1,35 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Kalam:wght@300;400&display=swap');
+
+html {
+	scrollbar-width: thin;
+}
+
+body {
+	overflow-x: hidden;
+	font-family: "Kalam", serif;
+	font-weight: 300;
+	font-style: normal;
+	font-size: 12px;
+	color: #4f4945;
+}
+
+h1 {
+	font-size: 140%;
+	font-weight: normal;
+	position: relative;
+	border-bottom: 3px double brown;
+}
+
+h2 {
+	font-size: 120%;
+	font-weight: normal;
+}
+
+img {
+	max-width: 100%;
+}
+
+a {
+	color: brown;
+}

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User_ID</title>
+  <style>
+    body {
+      background-color: #000;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    .moving-user-id {
+      position: absolute;
+      font-size: 20px;
+      color: #fff;
+      opacity: 0.6;
+    }
+    @keyframes moveUserIds1 {
+      0% { top: 0; left: 0; }
+      50% { top: 100%; left: 100%; }
+      100% { top: 0; left: 0; }
+    }
+    @keyframes moveUserIds2 {
+      0% { top: 0; left: 0; }
+      50% { top: 100%; left: 0; }
+      100% { top: 0; left: 0; }
+    }
+    @keyframes moveUserIds3 {
+      0% { top: 0; left: 0; }
+      50% { top: 0; left: 100%; }
+      100% { top: 0; left: 0; }
+    }
+    @keyframes moveUserIds4 {
+      0% { top: 0; left: 0; }
+      50% { top: 100%; left: 50%; }
+      100% { top: 0; left: 0; }
+    }
+    @keyframes moveUserIds5 {
+      0% { top: 0; left: 0; }
+      50% { top: 50%; left: 100%; }
+      100% { top: 0; left: 0; }
+    }
+    @keyframes moveUserIds6 {
+      0% { top: 0; left: 0; }
+      50% { top: 100%; left: 0; }
+      100% { top: 0; left: 0; }
+    }
+    @keyframes moveUserIds7 {
+      0% { top: 0; left: 0; }
+      50% { top: 0; left: 100%; }
+      100% { top: 0; left: 0; }
+    }
+    @keyframes moveUserIds8 {
+      0% { top: 0; left: 0; }
+      50% { top: 50%; left: 50%; }
+      100% { top: 0; left: 0; }
+    }
+    @keyframes moveUserIds9 {
+      0% { top: 0; left: 0; }
+      50% { top: 70%; left: 30%; }
+      100% { top: 0; left: 0; }
+    }
+    @keyframes moveUserIds10 {
+      0% { top: 0; left: 0; }
+      50% { top: 30%; left: 70%; }
+      100% { top: 0; left: 0; }
+    }
+    @keyframes moveUserIds13 {
+  0% { top: 0; left: 0; }
+  50% { top: 34%; left: 64%; }
+  100% { top: 0; left: 0; }
+}
+
+@keyframes moveUserIds14 {
+  0% { top: 0; left: 0; }
+  50% { top: 38%; left: 58%; }
+  100% { top: 0; left: 0; }
+}
+
+@keyframes moveUserIds15 {
+  0% { top: 0; left: 0; }
+  50% { top: 42%; left: 52%; }
+  100% { top: 0; left: 0; }
+}
+
+@keyframes moveUserIds16 {
+  0% { top: 0; left: 0; }
+  50% { top: 46%; left: 46%; }
+  100% { top: 0; left: 0; }
+}
+
+@keyframes moveUserIds17 {
+  0% { top: 0; left: 0; }
+  50% { top: 50%; left: 50%; }
+  100% { top: 0; left: 0; }
+}
+
+@keyframes moveUserIds18 {
+  0% { top: 0; left: 0; }
+  50% { top: 54%; left: 46%; }
+  100% { top: 0; left: 0; }
+}
+
+@keyframes moveUserIds19 {
+  0% { top: 0; left: 0; }
+  50% { top: 58%; left: 42%; }
+  100% { top: 0; left: 0; }
+}
+
+@keyframes moveUserIds20 {
+  0% { top: 0; left: 0; }
+  50% { top: 62%; left: 38%; }
+  100% { top: 0; left: 0; }
+}
+
+@keyframes moveUserIds21 {
+  0% { top: 0; left: 0; }
+  50% { top: 66%; left: 34%; }
+  100% { top: 0; left: 0; }
+}
+
+@keyframes moveUserIds22 {
+  0% { top: 0; left: 0; }
+  50% { top: 70%; left: 30%; }
+  100% { top: 0; left: 0; }
+}
+
+@keyframes moveUserIds23 {
+  0% { top: 0; left: 0; }
+  50% { top: 74%; left: 26%; }
+  100% { top: 0; left: 0; }
+}
+
+@keyframes moveUserIds24 {
+  0% { top: 0; left: 0; }
+  50% { top: 78%; left: 22%; }
+  100% { top: 0; left: 0; }
+}
+
+@keyframes moveUserIds25 {
+  0% { top: 0; left: 0; }
+  50% { top: 82%; left: 18%; }
+  100% { top: 0; left: 0; }
+}
+
+@keyframes moveUserIds26 {
+  0% { top: 0; left: 0; }
+  50% { top: 86%; left: 14%; }
+  100% { top: 0; left: 0; }
+}
+
+@keyframes moveUserIds27 {
+  0% { top: 0; left: 0; }
+  50% { top: 90%; left: 10%; }
+  100% { top: 0; left: 0; }
+}
+
+@keyframes moveUserIds28 {
+  0% { top: 0; left: 0; }
+  50% { top: 94%; left: 6%; }
+  100% { top: 0; left: 0; }
+}
+
+@keyframes moveUserIds29 {
+  0% { top: 0; left: 0; }
+  50% { top: 98%; left: 2%; }
+  100% { top: 0; left: 0; }
+}
+
+@keyframes moveUserIds30 {
+  0% { top: 0; left: 0; }
+  50% { top: 102%; left: -2%; }
+  100% { top: 0; left: 0; }
+}
+  </style>
+</head>
+<body>
+
+  <h1 style="text-align: center; color: #fff; margin-top: 50px;">User_ID Art Installation</h1>
+  
+  <div class="moving-user-id" style="top: 20%; left: 20%; animation: moveUserIds1 10s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 50%; left: 50%; animation: moveUserIds2 8s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 80%; left: 80%; animation: moveUserIds3 12s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 30%; left: 70%; animation: moveUserIds4 15s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 70%; left: 30%; animation: moveUserIds5 12s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 10%; left: 90%; animation: moveUserIds6 10s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 90%; left: 10%; animation: moveUserIds7 8s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 40%; left: 40%; animation: moveUserIds8 10s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 60%; left: 60%; animation: moveUserIds9 12s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 80%; left: 20%; animation: moveUserIds10 15s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 80%; left: 20%; animation: moveUserIds11 15s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 20%; left: 50%; animation: moveUserIds12 8s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 60%; left: 80%; animation: moveUserIds13 12s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 10%; left: 30%; animation: moveUserIds14 15s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 50%; left: 10%; animation: moveUserIds15 12s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 70%; left: 90%; animation: moveUserIds16 10s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 30%; left: 10%; animation: moveUserIds17 8s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 80%; left: 40%; animation: moveUserIds18 10s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 40%; left: 70%; animation: moveUserIds19 12s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 20%; left: 80%; animation: moveUserIds20 15s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 90%; left: 20%; animation: moveUserIds21 15s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 60%; left: 30%; animation: moveUserIds22 8s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 80%; left: 60%; animation: moveUserIds23 12s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 30%; left: 50%; animation: moveUserIds24 15s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 50%; left: 20%; animation: moveUserIds25 12s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 10%; left: 90%; animation: moveUserIds26 10s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 90%; left: 10%; animation: moveUserIds27 8s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 40%; left: 40%; animation: moveUserIds28 10s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 60%; left: 60%; animation: moveUserIds29 12s linear infinite;">User_ID</div>
+  <div class="moving-user-id" style="top: 80%; left: 20%; animation: moveUserIds30 15s linear infinite;">User_ID</div>
+
+
+  <ul class="user-id-list" style="left: 10%; top: 10%; color: #fff;">
+    <li>User_ID</li>
+    <li>User_ID</li>
+    <li>User_ID</li>
+    <li>User_ID</li>
+  </ul>
+
+  <ul class="user-id-list" style="left: 80%; top: 70%; color: #fff;">
+    <li>User_ID</li>
+    <li>User_ID</li>
+    <li>User_ID</li>
+    <li>User_ID</li>
+  </ul>
+
+  <ul class="user-id-list" style="left: 40%; top: 50%; color: #fff;">
+    <li>User_ID</li>
+    <li>User_ID</li>
+    <li>User_ID</li>
+    <li>User_ID</li>
+  </ul>
+
+  <ul class="user-id-list" style="left: 60%; top: 20%; color: #fff;">
+    <li>User_ID</li>
+    <li>User_ID</li>
+    <li>User_ID</li>
+    <li>User_ID</li>
+  </ul>
+
+</body>
+</html>

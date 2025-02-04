@@ -1,1 +1,387 @@
-sub domain up
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experimental Music Label</title>
+    <!-- Include WinBox.js library -->
+    <script src="./js/winbox.bundle.min.js"></script>
+    <style>
+        /* Basic styling for the test window */
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+            position: relative; /* Set position to relative for proper stacking */
+            min-height: 100vh; /* Ensure full height of the viewport */
+        }
+        @font-face {
+            font-family: 'Saira-Light';
+            src: url('./fonts/Saira-Light.otf') format('opentype');
+        }
+        @font-face {
+            font-family: 'COLLONAR-CAPS';
+            src: url('./fonts/COLLONAR-CAPS.otf') format('opentype');
+        }
+        @font-face {
+            font-family: 'Sporting';
+            src: url('./fonts/Sporting.otf') format('opentype');
+        }
+        /* Style for buttons */
+        .button-container {
+            position: fixed;
+            top: 50%;
+            left: 5%; /* Adjusted margin-left */
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        button {
+            background-color: #333;
+            font-family: 'COLLONAR-CAPS', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px 0; /* Adjusted margin for vertical spacing */
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Smooth transition for background color change */
+            width: 150px; /* Set width for all buttons */
+        }
+
+        button:hover {
+            background-color: white; /* Invert colors on hover */
+            color: black;
+            font-family: Sporting, Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+
+        /* Style for test window content */
+        .window-content {
+            padding: 20px;
+        }
+
+        /* Style for iframe */
+        #iframeContent {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Style for random words */
+        .random-words {
+            position: absolute; /* Position the word list absolutely */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: -1; /* Set z-index to move behind other content */
+        }
+
+        .random-word {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 100%;
+            margin: 0px;
+            position: relative; /* Position relative for absolute positioning of the prompt */
+        }
+
+        .random-word span {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 100%;
+        }
+
+        /* Blinking animation for the prompt */
+        .prompt-indicator {
+            position: absolute;
+            font-family: 'Courier New', Courier, monospace;
+            top: 50%;
+            right: -15px; /* Adjust the position as needed */
+            transform: translateY(-50%);
+            height: 80%; /* Adjust size to resemble a vertical line */
+            width: 2px; /* Adjust size to resemble a vertical line */
+            background-color: white; /* Change color to white */
+            animation: blink 1s infinite; /* Blink animation */
+        }
+
+        @keyframes blink {
+            0% { opacity: 0; }
+            70% { opacity: 1; }
+            99% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+
+
+/* Style for text divs */
+#significText,
+#hatifText,
+#otherLabelsText {
+    background-color: black; /* Set background color to black */
+    color: white;
+    padding: 10px;
+    margin-top: 10px; /* Adjust margin as needed */
+}
+
+/* Style for label description */
+        /* Style for label description */
+        #labelDescription {
+            font-family: monospace;
+            font-size: 16px;
+            line-height: 1.5;
+            max-height: 200px; /* Set a maximum height for the div */
+            overflow-y: auto; /* Add a scrollbar when the text overflows */
+            width: 50%; /* Set the width to 50% of the viewport width */
+            margin: left; /* Center the div horizontally */
+        }
+
+        /* Media query for mobile devices */
+        @media screen and (max-width: 600px) {
+            button {
+                padding: 5px 10px; /* Reduce button padding for mobile devices */
+                font-size: 14px; /* Reduce button font size for mobile devices */
+            }
+        }
+
+
+/* Style for label roaster button */
+#labelRoasterButton {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 150px;
+}
+
+#labelRoasterButton:hover {
+    background-color: white;
+    color: black;
+}
+
+
+        /* Contact button */
+        #contactButton {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Smooth transition for background color change */
+        }
+
+        #contactButton:hover {
+            background-color: white; /* Invert colors on hover */
+            color: black;
+        }
+        .show {
+    display: block !important;
+}
+    </style>
+</head>
+<body>
+    <!-- Test menu -->
+    <div class="button-container">
+        <!-- First line -->
+        <button id="significButton" onclick="toggleText('significButton', 'significText')">SIGNIFICATIF</button>
+        <div id="significText" style="display: none;">
+            <div id="labelDescription">
+                Significatif thrives on this juxtaposition, utilizing the very medium associated with mechanization and precision to convey the rich tapestry of human emotions and experiences. While electronic music may inherently possess a certain mechanical quality, Significatif harnesses this characteristic as a canvas upon which to paint intricate layers of meaning, emotion, and humanity.
+
+The label recognizes that electronic music, with its precise rhythms and synthesized sounds, offers a unique opportunity for artistic experimentation and expression. Rather than viewing the mechanical nature of electronic production as a limitation, Significatif sees it as a tool for amplifying the depth and complexity of the music it releases.
+
+Within the realm of electronic music, Significatif encourages artists to embrace imperfection, allowing human error and spontaneity to shine through amidst the synthesized textures and rhythms. It celebrates the moments where the rigid structure of electronic production is disrupted, giving way to raw, unfiltered expressions of emotion and creativity.
+
+In doing so, Significatif challenges the notion that electronic music must adhere to a cold, robotic aesthetic, instead asserting that it can serve as a conduit for deeply human experiences. By infusing electronic compositions with soulful melodies, evocative textures, and thought-provoking themes, Significatif demonstrates that even within the realm of technology-driven music, the human spirit can still shine through with profound clarity and resonance.
+            </div>
+        </div>
+
+        <!-- Second line -->
+        <button id="hatifButton" onclick="toggleText('hatifButton', 'hatifText')">hâtif</button>
+        <div id="hatifText" style="display: none;">
+            <div id="labelDescription">
+                "hâtif," the sub-label of Significatif, presents a compelling contrast to its parent label's meticulous and thought-provoking approach. The very name "Hatif" suggests a sense of urgency and spontaneity, emphasizing the idea of sharing things "à la hâte" – quickly and without delay.
+
+At its core, Hatif embraces the idea of immediacy and rawness, offering a platform for music that is created impulsively and without the need for extensive refinement. This sub-label is all about capturing the moment, allowing artists to share their creations as they come to fruition, without the constraints of traditional production processes.
+
+Unlike Significatif, where every detail is carefully considered and polished to perfection, Hatif embraces imperfection as a fundamental aspect of its aesthetic. There's no pressure for mastering or conventional mixing techniques; instead, the focus is on authenticity and spontaneity.
+
+Hatif's releases may vary widely in style and content. Some may carry deep meaning or hidden layers, reflecting the spontaneous expression of the artist's thoughts and emotions in the moment. Others may simply be music made on the go, reflecting the ebb and flow of creative inspiration without the need for extensive deliberation or refinement.
+
+In essence, Hatif serves as a dynamic counterpart to Significatif, offering a space for artists to embrace the chaos of creativity and share their music in its purest, most unfiltered form. It's a celebration of artistic freedom and experimentation, where the emphasis is on capturing the raw energy and vitality of the creative process, rather than conforming to established norms or expectations.
+            </div>
+        </div>
+
+        <!-- Third line -->
+        <button id="otherLabelsButton" onclick="toggleText('otherLabelsButton', 'otherLabelsText')">Other Labels Distributed</button>
+        <div id="otherLabelsText" style="display: none;">
+            <div>
+                oxypetals (for metaki), 
+            </div>
+        </div>
+
+        <!-- Label roaster button -->
+        <button id="labelRoasterButton" onclick="toggleRoaster()">Label Roaster</button>
+        <div id="roasterButtons" style="display: none;"> <!-- Initially hidden -->
+            <button onclick="openWindow('metaki.html')">metaki</button>
+            <button onclick="openWindow('y4k4r1.html')">y4k4r1</button>
+            <button onclick="openWindow('user_id.html')">user_id</button>
+            <button onclick="openWindow('rich-gibbe.html')">Rich Gibbe</button>
+            <button onclick="openWindow('cbrspcISRS/index.html')">cbrspcISRS</button>
+            <button onclick="openWindow('purpleBanshee.html')">purpleBanshee</button>
+            <button onclick="openWindow('leo-dubois.html')">Léo Dubois</button>
+            <button onclick="openWindow('Ukito-Azuma.html')">Ukito Azuma</button>
+            <button onclick="openWindow('Sarah-Davenport.html')">Sarah Davenport</button>
+        </div>
+        <button onclick="location.href='mailto:contact@1113000.xyz';">Contact</button>
+
+    </div>
+
+
+
+    <!-- Random words -->
+    <div id="randomWords" class="random-words">
+        <div class="random-word" id="letterS">S <span class="prompt-indicator"></span></div>
+        <div class="random-word" id="letterI">I <span class="prompt-indicator"></span></div>
+        <div class="random-word" id="letterG">G <span class="prompt-indicator"></span></div>
+        <div class="random-word" id="letterN">N <span class="prompt-indicator"></span></div>
+        <div class="random-word" id="letterI2">I <span class="prompt-indicator"></span></div>
+        <div class="random-word" id="letterF">F <span class="prompt-indicator"></span></div>
+        <div class="random-word" id="letterI3">I <span class="prompt-indicator"></span></div>
+        <div class="random-word" id="letterC">C <span class="prompt-indicator"></span></div>
+        <div class="random-word" id="letterA">A <span class="prompt-indicator"></span></div>
+        <div class="random-word" id="letterT">T <span class="prompt-indicator"></span></div>
+        <div class="random-word" id="letterI4">I <span class="prompt-indicator"></span></div>
+        <div class="random-word" id="letterF2">F <span class="prompt-indicator"></span></div>
+    </div>
+
+    <!-- Script to handle opening and closing of the test window -->
+    <script>
+        // Function to open the test window with specific content
+        function openWindow(htmlFileName) {
+            // Create a new WinBox instance
+            const win = new WinBox({
+                title: htmlFileName.split(".")[0], // Extract title from file name
+                background: '#888888',
+                border: 2,
+                x: 'center',
+                y: 'center',
+                url: './artists/' + htmlFileName, // Load the content from the specified URL
+                close: function () {
+                    // Use arrow function to ensure 'this' refers to the WinBox instance
+                    this.close(); // Close the window when closed
+                }
+            });
+        }
+
+        // Function to toggle display of label roaster buttons
+        function toggleRoaster() {
+            const roasterButtons = document.getElementById("roasterButtons");
+            roasterButtons.style.display = roasterButtons.style.display === "none" ? "block" : "none";
+        }
+
+        // Function to toggle display of text under buttons
+function toggleText(buttonId, textId) {
+    const buttonText = document.getElementById(buttonId);
+    const textContent = document.getElementById(textId);
+
+    // Toggle text content visibility by toggling a CSS class
+    textContent.classList.toggle('show');
+
+    // Toggle button colors based on the visibility of text content
+    if (textContent.classList.contains('show')) {
+        buttonText.style.backgroundColor = "white"; // Invert button colors
+        buttonText.style.color = "black";
+    } else {
+        buttonText.style.backgroundColor = "#333"; // Reset button colors
+        buttonText.style.color = "white";
+    }
+}
+
+
+        // Random words functionality
+        const wordLists = {
+            S: ["Sonic", "Synthesis", "Sublime", "Surreal", "Serendipity", "Spectral", "Shifting", "Subversive"],
+            I: ["Immersive", "Intuitive", "Inventive", "Ineffable", "Interplay", "Inquisitive", "Irregular", "Iconoclastic"],
+            G: ["Galactic", "Glitch", "Groove", "Genesi", "Gradie", "Gestur", "Gravit", "Gyrati"],
+            N: ["Nebula", "Navigating", "Nuanced", "Nexus", "Novel", "Nonlinear", "Nurturing", "Nonconformist"],
+            I2: ["Improvisational", "Imaginary", "Insightful", "Infusing", "Incandescent", "Inception", "Illuminated", "Impactful"],
+            F: ["Flux", "Fractal", "Fusion", "Frequencies", "Fluidity", "Frenetic", "Fathomless", "Futuristic"],
+            I3: ["Iridescent", "Ingenious", "Ineffable", "Inimitable", "Insightful", "Incandescent", "Inclusive", "Ingenious"],
+            C: ["Cosmic", "Chaotic", "Cipher", "Catalyst", "Chimerical", "Cacophony", "Cyclical", "Contrasting"],
+            A: ["Abstract", "Avant-garde", "Arcane", "Ambient", "Alchemical", "Anomaly", "Aural", "Asynchronous"],
+            T: ["Transcendent", "Turbulent", "Texture", "Tectonic", "Temporal", "Tonal", "Transformative", "Tremor"],
+            I4: ["Interdimensional", "Insurgent", "Incisive", "Illuminating", "Inceptive", "Intertwining", "Ineffable", "Impulsive"],
+            F2: ["Fringe", "Fluctuating", "Fusion", "Flowing", "Formless", "Flickering", "Fragmented", "Feral"],
+        };
+
+        function getRandomWord(letter) {
+            const words = wordLists[letter];
+            const randomIndex = Math.floor(Math.random() * words.length);
+            return words[randomIndex];
+        }
+
+        function updateWord(letter) {
+            const wordElement = document.getElementById(`letter${letter}`);
+            const currentWord = wordElement.textContent;
+
+            // Simulate typing effect by deleting the rest of the existing word
+            const deleteInterval = 100; // Interval in milliseconds for each character deletion
+            let index = currentWord.length;
+
+            const deleteIntervalId = setInterval(() => {
+                if (index > 1) {
+                    wordElement.innerHTML = `<span style="font-family: '2';font-size: 100%;">${currentWord.charAt(0)}</span>${currentWord.substring(1, index - 1)}`;
+                    index--;
+                } else {
+                    clearInterval(deleteIntervalId);
+
+                    // After deleting, start typing the new word
+                    const newWord = getRandomWord(letter);
+                    const typeInterval = 100; // Interval in milliseconds for each character typing
+
+                    let newIndex = 0;
+                    const typeIntervalId = setInterval(() => {
+                        wordElement.innerHTML = `<span style="font-family: '1';font-size: 100%;">${newWord.charAt(0)}</span>${newWord.substring(1, newIndex + 1)}<span class="prompt-indicator"></span>`;
+                        newIndex++;
+
+                        if (newIndex === newWord.length) {
+                            clearInterval(typeIntervalId);
+                        }
+                    }, typeInterval);
+                }
+            }, deleteInterval);
+        }
+
+        function updateRandomWord(letter) {
+            setInterval(() => {
+                updateWord(letter);
+            }, Math.floor(Math.random() * (30000 - 5000 + 1) + 5000));
+        }
+
+        // Initial delay before starting the word animation (3 seconds)
+        setTimeout(() => {
+            // Show each word individually from 3 to 5 seconds
+            const words = ['S', 'I', 'G', 'N', 'I2', 'F', 'I3', 'C', 'A', 'T', 'I4', 'F2'];
+            words.forEach((word, index) => {
+                setTimeout(() => updateWord(word), index * 1000);
+            });
+
+            // Set interval to update words randomly every 5 to 30 seconds
+            words.forEach(word => {
+                updateRandomWord(word);
+            });
+        }, 1000); // 3 seconds initial delay
+    </script>
+</body>
+</html>
