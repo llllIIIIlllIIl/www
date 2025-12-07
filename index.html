@@ -4,19 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIGNIFICATIF MUSIC LABEL</title>
-    <!-- Include WinBox.js library -->
     <script src="./js/winbox.bundle.min.js"></script>
     <style>
-        /* Basic styling for the test window */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             background-color: black;
             color: white;
             font-family: 'Courier New', Courier, monospace;
-            margin: 0;
-            padding: 0; 
-            position: relative; /* Set position to relative for proper stacking */
-            min-height: 100vh; /* Ensure full height of the viewport */
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
+
         @font-face {
             font-family: 'Saira-Light';
             src: url('./fonts/Saira-Light.otf') format('opentype');
@@ -29,17 +33,18 @@
             font-family: 'Sporting';
             src: url('./fonts/Sporting.otf') format('opentype');
         }
-        /* Style for buttons */
+
         .button-container {
             position: fixed;
             top: 50%;
-            left: 5%; /* Adjusted margin-left */
+            left: 5%;
             transform: translateY(-50%);
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
+            gap: 5px;
+            z-index: 100;
+            max-width: 90vw;
         }
-
 
         button {
             background-color: #333;
@@ -47,264 +52,302 @@
             color: white;
             border: none;
             padding: 10px 20px;
-            margin: 5px 0; /* Adjusted margin for vertical spacing */
             cursor: pointer;
-            transition: background-color 0.3s ease; /* Smooth transition for background color change */
-            width: 150px; /* Set width for all buttons */
+            transition: background-color 0.3s ease, color 0.3s ease;
+            width: 150px;
+            font-size: 14px;
         }
 
-
         button:hover {
-            background-color: white; /* Invert colors on hover */
+            background-color: white;
             color: black;
             font-family: Sporting, Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
         }
 
+        button.active {
+            background-color: white;
+            color: black;
+        }
 
-        /* Style for test window content */
         .window-content {
             padding: 20px;
         }
 
-
-        /* Style for iframe */
         #iframeContent {
             width: 100%;
             height: 100%;
             border: none;
         }
 
-
-        /* Style for random words */
         .random-words {
-            position: absolute; /* Position the word list absolutely */
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            z-index: -1; /* Set z-index to move behind other content */
+            z-index: 1;
+            pointer-events: none;
         }
-
 
         .random-word {
             font-family: 'Courier New', Courier, monospace;
-            font-size: 100%;
-            margin: 0px;
-            position: relative; /* Position relative for absolute positioning of the prompt */
+            font-size: clamp(16px, 4vw, 24px);
+            margin: 0;
+            position: relative;
         }
-
 
         .random-word span {
             font-family: 'Courier New', Courier, monospace;
             font-size: 100%;
         }
 
-
-        /* Blinking animation for the prompt */
         .prompt-indicator {
             position: absolute;
             font-family: 'Courier New', Courier, monospace;
             top: 50%;
-            right: -15px; /* Adjust the position as needed */
+            right: -15px;
             transform: translateY(-50%);
-            height: 80%; /* Adjust size to resemble a vertical line */
-            width: 2px; /* Adjust size to resemble a vertical line */
-            background-color: white; /* Change color to white */
-            animation: blink 1s infinite; /* Blink animation */
+            height: 80%;
+            width: 2px;
+            background-color: white;
+            animation: blink 1s infinite;
         }
-
 
         @keyframes blink {
-            0% { opacity: 0; }
-            70% { opacity: 1; }
-            99% { opacity: 1; }
-            100% { opacity: 0; }
+            0%, 100% { opacity: 0; }
+            70%, 99% { opacity: 1; }
         }
 
+        #significText,
+        #hatifText,
+        #otherLabelsText,
+        #bandcampLinks,
+        #artExhibitionsContent {
+            background-color: #1a1a1a;
+            color: #cccccc;
+            padding: 15px;
+            margin-top: 10px;
+            margin-left: 20px;
+            border-left: 3px solid #555;
+            display: none;
+            max-width: 400px;
+        }
 
+        #bandcampLinks a,
+        #artExhibitionsContent a {
+            display: block;
+            color: #cccccc;
+            text-decoration: none;
+            padding: 5px 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            transition: color 0.3s ease;
+        }
 
+        #bandcampLinks a:hover,
+        #artExhibitionsContent a:hover {
+            color: white;
+        }
 
-/* Style for text divs */
-#significText,
-#hatifText,
-#otherLabelsText {
-    background-color: black; /* Set background color to black */
-    color: white;
-    padding: 10px;
-    margin-top: 10px; /* Adjust margin as needed */
-}
-
-
-/* Style for label description */
-        /* Style for label description */
         #labelDescription {
             font-family: monospace;
-            font-size: 16px;
-            line-height: 1.5;
-            max-height: 200px; /* Set a maximum height for the div */
-            overflow-y: auto; /* Add a scrollbar when the text overflows */
-            width: 50%; /* Set the width to 50% of the viewport width */
-            margin: left; /* Center the div horizontally */
+            font-size: 13px;
+            line-height: 1.6;
+            max-height: 250px;
+            overflow-y: auto;
         }
 
+        #roasterButtons {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            margin-left: 20px;
+            margin-top: 5px;
+        }
 
-        /* Media query for mobile devices */
-        @media screen and (max-width: 600px) {
+        #roasterButtons button {
+            width: 130px;
+            background-color: #222;
+            font-size: 12px;
+        }
+
+        #roasterButtons button:hover {
+            background-color: #666;
+            color: white;
+        }
+
+        .show {
+            display: block !important;
+        }
+
+        .show-flex {
+            display: flex !important;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 10px;
+            left: 5%;
+            background-color: black;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px;
+            padding: 10px 0;
+            z-index: 1000;
+            letter-spacing: 2px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .button-container {
+                left: 2%;
+            }
+
             button {
-                padding: 5px 10px; /* Reduce button padding for mobile devices */
-                font-size: 14px; /* Reduce button font size for mobile devices */
+                padding: 8px 16px;
+                font-size: 12px;
+                width: 130px;
+            }
+
+            #significText,
+            #hatifText,
+            #otherLabelsText,
+            #bandcampLinks,
+            #artExhibitionsContent {
+                max-width: 250px;
+                margin-left: 15px;
+            }
+
+            #labelDescription {
+                font-size: 11px;
+                max-height: 180px;
+            }
+
+            #roasterButtons button {
+                width: 110px;
+            }
+
+            .footer {
+                left: 2%;
+                font-size: 10px;
+            }
+
+            .random-word {
+                font-size: clamp(14px, 3vw, 18px);
             }
         }
 
+        @media screen and (max-width: 480px) {
+            .button-container {
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                align-items: center;
+            }
 
+            button {
+                width: 120px;
+                padding: 6px 12px;
+            }
 
-/* Style for label roaster button */
-#labelRoasterButton {
-    background-color: #333;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    margin-top: 20px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    width: 150px;
-}
+            #significText,
+            #hatifText,
+            #otherLabelsText,
+            #bandcampLinks,
+            #artExhibitionsContent {
+                margin-left: 10px;
+                max-width: 200px;
+            }
 
+            #roasterButtons {
+                margin-left: 10px;
+            }
 
-#labelRoasterButton:hover {
-    background-color: white;
-    color: black;
-}
+            #roasterButtons button {
+                width: 100px;
+            }
 
+            .random-words {
+                top: 60%;
+            }
 
-
-        /* Contact button */
-        #contactButton {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            background-color: #333;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: background-color 0.3s ease; /* Smooth transition for background color change */
+            .footer {
+                left: 50%;
+                transform: translateX(-50%);
+                text-align: center;
+                width: 90%;
+            }
         }
-
-
-        #contactButton:hover {
-            background-color: white; /* Invert colors on hover */
-            color: black;
-        }
-        .show {
-    display: block !important;
-}
-
-/* Footer styling */
-.footer {
-    position: fixed;
-    bottom: 0;
-    left: 5%; /* Same left alignment as button container */
-    background-color: black;
-    color: white;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 14px;
-    padding: 10px 0;
-    z-index: 1000;
-    letter-spacing: 2px;
-    white-space: pre-wrap;
-}
-
-.footer a {
-    color: white;
-    text-decoration: none;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 14px;
-    letter-spacing: 2px;
-}
-
-.footer a:hover {
-    color: #ccc;
-}
     </style>
 </head>
 <body>
-    <!-- Test menu -->
     <div class="button-container">
-        <!-- First line -->
         <button id="significButton" onclick="toggleText('significButton', 'significText')">SIGNIFICATIF</button>
-        <div id="significText" style="display: none;">
+        <div id="significText">
             <div id="labelDescription">
                 Significatif thrives on this juxtaposition, utilizing the very medium associated with mechanization and precision to convey the rich tapestry of human emotions and experiences. While electronic music may inherently possess a certain mechanical quality, Significatif harnesses this characteristic as a canvas upon which to paint intricate layers of meaning, emotion, and humanity.
 
-
 The label recognizes that electronic music, with its precise rhythms and synthesized sounds, offers a unique opportunity for artistic experimentation and expression. Rather than viewing the mechanical nature of electronic production as a limitation, Significatif sees it as a tool for amplifying the depth and complexity of the music it releases.
 
-
 Within the realm of electronic music, Significatif encourages artists to embrace imperfection, allowing human error and spontaneity to shine through amidst the synthesized textures and rhythms. It celebrates the moments where the rigid structure of electronic production is disrupted, giving way to raw, unfiltered expressions of emotion and creativity.
-
 
 In doing so, Significatif challenges the notion that electronic music must adhere to a cold, robotic aesthetic, instead asserting that it can serve as a conduit for deeply human experiences. By infusing electronic compositions with soulful melodies, evocative textures, and thought-provoking themes, Significatif demonstrates that even within the realm of technology-driven music, the human spirit can still shine through with profound clarity and resonance.
             </div>
         </div>
 
-
-        <!-- Second line -->
         <button id="hatifButton" onclick="toggleText('hatifButton', 'hatifText')">hâtif</button>
-        <div id="hatifText" style="display: none;">
+        <div id="hatifText">
             <div id="labelDescription">
                 "hâtif," the sub-label of Significatif, presents a compelling contrast to its parent label's meticulous and thought-provoking approach. The very name "Hatif" suggests a sense of urgency and spontaneity, emphasizing the idea of sharing things "à la hâte" – quickly and without delay.
 
-
 At its core, Hatif embraces the idea of immediacy and rawness, offering a platform for music that is created impulsively and without the need for extensive refinement. This sub-label is all about capturing the moment, allowing artists to share their creations as they come to fruition, without the constraints of traditional production processes.
-
 
 Unlike Significatif, where every detail is carefully considered and polished to perfection, Hatif embraces imperfection as a fundamental aspect of its aesthetic. There's no pressure for mastering or conventional mixing techniques; instead, the focus is on authenticity and spontaneity.
 
-
 Hatif's releases may vary widely in style and content. Some may carry deep meaning or hidden layers, reflecting the spontaneous expression of the artist's thoughts and emotions in the moment. Others may simply be music made on the go, reflecting the ebb and flow of creative inspiration without the need for extensive deliberation or refinement.
-
 
 In essence, Hatif serves as a dynamic counterpart to Significatif, offering a space for artists to embrace the chaos of creativity and share their music in its purest, most unfiltered form. It's a celebration of artistic freedom and experimentation, where the emphasis is on capturing the raw energy and vitality of the creative process, rather than conforming to established norms or expectations.
             </div>
         </div>
 
-
-        <!-- Third line -->
         <button id="otherLabelsButton" onclick="toggleText('otherLabelsButton', 'otherLabelsText')">Other Labels Distributed</button>
-        <div id="otherLabelsText" style="display: none;">
+        <div id="otherLabelsText">
             <div>
                 oxypetals (for metaki), 
             </div>
         </div>
 
-
-        <!-- Label roaster button -->
         <button id="labelRoasterButton" onclick="toggleRoaster()">Label Roaster</button>
-        <div id="roasterButtons" style="display: none;"> <!-- Initially hidden -->
+        <div id="roasterButtons">
             <button onclick="openWindow('metaki.html')">metaki</button>
             <button onclick="openWindow('y4k4r1.html')">y4k4r1</button>
             <button onclick="openWindow('user_id.html')">USER_ID</button>
             <button onclick="openWindow('rich-gibbe.html')">Rich Gibbe</button>
             <button onclick="openWindow('cbrspcISRS/index.html')">cbrspcISRS</button>
             <button onclick="openWindow('purpleBanshee.html')">purpleBanshee</button>
-            <button onclick="openWindow('leo-dubois.html')">Léo Dubois</button>
+            <button onclick="openWindow('lio-dubois.html')">Léo Dubois</button>
             <button onclick="openWindow('Ukito-Azuma.html')">Ukito Azuma</button>
             <button onclick="openWindow('Sarah-Davenport.html')">Sarah Davenport</button>
         </div>
+
+        <button id="bandcampButton" onclick="toggleText('bandcampButton', 'bandcampLinks')">Bandcamp</button>
+        <div id="bandcampLinks">
+            <a href="https://s-hatif.bandcamp.com/" target="_blank">ｈ â ｔ ｉ ｆ</a>
+            <a href="https://significatif.bandcamp.com/" target="_blank">ｓ ｉ ｇ ｎ ｉ ｆ ｉ ｃ ａ ｔ ｉ ｆ</a>
+        </div>
+
+        <button id="artExhibitionsButton" onclick="toggleText('artExhibitionsButton', 'artExhibitionsContent')">Art Exhibitions</button>
+        <div id="artExhibitionsContent">
+            <a href="#" target="_blank">Exhibition 1</a>
+            <a href="#" target="_blank">Exhibition 2</a>
+            <a href="#" target="_blank">Exhibition 3</a>
+        </div>
+
         <button onclick="location.href='mailto:contact@1113000.xyz';">Contact</button>
-
-
     </div>
 
-
-
-
-    <!-- Random words -->
     <div id="randomWords" class="random-words">
         <div class="random-word" id="letterS">S <span class="prompt-indicator"></span></div>
         <div class="random-word" id="letterI">I <span class="prompt-indicator"></span></div>
@@ -320,61 +363,49 @@ In essence, Hatif serves as a dynamic counterpart to Significatif, offering a sp
         <div class="random-word" id="letterF2">F <span class="prompt-indicator"></span></div>
     </div>
 
-    <!-- Footer -->
-    <div class="footer">ｂａｎｄｃａｍｐ<a href="https://s-hatif.bandcamp.com/"> | ｈ â ｔ ｉ ｆ</a>
-<a href="https://significatif.bandcamp.com/">             | ｓ ｉ ｇ ｎ ｉ ｆ ｉ ｃ ａ ｔ ｉ ｆ</a></div>
+    <div class="footer">© SIGNIFICATIF 2025</div>
 
-
-    <!-- Script to handle opening and closing of the test window -->
     <script>
-        // Function to open the test window with specific content
         function openWindow(htmlFileName) {
-            // Create a new WinBox instance
             const win = new WinBox({
-                title: htmlFileName.split(".")[0], // Extract title from file name
+                title: htmlFileName.split(".")[0],
                 background: '#888888',
                 border: 2,
                 x: 'center',
                 y: 'center',
-                url: './artists/' + htmlFileName, // Load the content from the specified URL
+                url: './artists/' + htmlFileName,
                 close: function () {
-                    // Use arrow function to ensure 'this' refers to the WinBox instance
-                    this.close(); // Close the window when closed
+                    this.close();
                 }
             });
         }
 
-
-        // Function to toggle display of label roaster buttons
         function toggleRoaster() {
             const roasterButtons = document.getElementById("roasterButtons");
-            roasterButtons.style.display = roasterButtons.style.display === "none" ? "block" : "none";
+            const button = document.getElementById("labelRoasterButton");
+            
+            if (roasterButtons.classList.contains('show-flex')) {
+                roasterButtons.classList.remove('show-flex');
+                button.classList.remove('active');
+            } else {
+                roasterButtons.classList.add('show-flex');
+                button.classList.add('active');
+            }
         }
 
+        function toggleText(buttonId, textId) {
+            const buttonText = document.getElementById(buttonId);
+            const textContent = document.getElementById(textId);
 
-        // Function to toggle display of text under buttons
-function toggleText(buttonId, textId) {
-    const buttonText = document.getElementById(buttonId);
-    const textContent = document.getElementById(textId);
+            if (textContent.classList.contains('show')) {
+                textContent.classList.remove('show');
+                buttonText.classList.remove('active');
+            } else {
+                textContent.classList.add('show');
+                buttonText.classList.add('active');
+            }
+        }
 
-
-    // Toggle text content visibility by toggling a CSS class
-    textContent.classList.toggle('show');
-
-
-    // Toggle button colors based on the visibility of text content
-    if (textContent.classList.contains('show')) {
-        buttonText.style.backgroundColor = "white"; // Invert button colors
-        buttonText.style.color = "black";
-    } else {
-        buttonText.style.backgroundColor = "#333"; // Reset button colors
-        buttonText.style.color = "white";
-    }
-}
-
-
-
-        // Random words functionality
         const wordLists = {
             S: ["Sonic", "Synthesis", "Sublime", "Surreal", "Serendipity", "Spectral", "Shifting", "Subversive"],
             I: ["Immersive", "Intuitive", "Inventive", "Ineffable", "Interplay", "Inquisitive", "Irregular", "Iconoclastic"],
@@ -390,23 +421,18 @@ function toggleText(buttonId, textId) {
             F2: ["Fringe", "Fluctuating", "Fusion", "Flowing", "Formless", "Flickering", "Fragmented", "Feral"],
         };
 
-
         function getRandomWord(letter) {
             const words = wordLists[letter];
             const randomIndex = Math.floor(Math.random() * words.length);
             return words[randomIndex];
         }
 
-
         function updateWord(letter) {
             const wordElement = document.getElementById(`letter${letter}`);
             const currentWord = wordElement.textContent;
 
-
-            // Simulate typing effect by deleting the rest of the existing word
-            const deleteInterval = 100; // Interval in milliseconds for each character deletion
+            const deleteInterval = 100;
             let index = currentWord.length;
-
 
             const deleteIntervalId = setInterval(() => {
                 if (index > 1) {
@@ -415,17 +441,13 @@ function toggleText(buttonId, textId) {
                 } else {
                     clearInterval(deleteIntervalId);
 
-
-                    // After deleting, start typing the new word
                     const newWord = getRandomWord(letter);
-                    const typeInterval = 100; // Interval in milliseconds for each character typing
-
+                    const typeInterval = 100;
 
                     let newIndex = 0;
                     const typeIntervalId = setInterval(() => {
                         wordElement.innerHTML = `<span style="font-family: '1';font-size: 100%;">${newWord.charAt(0)}</span>${newWord.substring(1, newIndex + 1)}<span class="prompt-indicator"></span>`;
                         newIndex++;
-
 
                         if (newIndex === newWord.length) {
                             clearInterval(typeIntervalId);
@@ -435,28 +457,22 @@ function toggleText(buttonId, textId) {
             }, deleteInterval);
         }
 
-
         function updateRandomWord(letter) {
             setInterval(() => {
                 updateWord(letter);
             }, Math.floor(Math.random() * (30000 - 5000 + 1) + 5000));
         }
 
-
-        // Initial delay before starting the word animation (3 seconds)
         setTimeout(() => {
-            // Show each word individually from 3 to 5 seconds
             const words = ['S', 'I', 'G', 'N', 'I2', 'F', 'I3', 'C', 'A', 'T', 'I4', 'F2'];
             words.forEach((word, index) => {
                 setTimeout(() => updateWord(word), index * 1000);
             });
 
-
-            // Set interval to update words randomly every 5 to 30 seconds
             words.forEach(word => {
                 updateRandomWord(word);
             });
-        }, 1000); // 3 seconds initial delay
+        }, 1000);
     </script>
 </body>
 </html>
