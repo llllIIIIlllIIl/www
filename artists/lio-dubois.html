@@ -7,42 +7,16 @@
         body {
             margin: 0;
             height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        .top-bar {
-            height: 35px;
-            background: rgba(0,123,255,0.9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 10px;
-            box-sizing: border-box;
-        }
-        .open-btn {
-            color: white;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: bold;
-            padding: 6px 12px;
-            border-radius: 4px;
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
-        }
-        .open-btn:hover {
-            background: rgba(255,255,255,0.3);
+            overflow: hidden;
         }
         iframe {
-            flex: 1;
             width: 100%;
+            height: 100%;
             border: none;
         }
     </style>
 </head>
 <body>
-    <div class="top-bar">
-        <a href="https://1113000.xyz/lio/" target="_blank" class="open-btn">↗️ Open Full</a>
-    </div>
     <iframe src="https://1113000.xyz/lio/" 
             allowfullscreen 
             allow="autoplay *; encrypted-media *; fullscreen *"
