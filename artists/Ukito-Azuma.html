@@ -1,268 +1,352 @@
 <!DOCTYPE html>
 <html><head>
 <meta http-equiv="content-type" content="text/html; charset=windows-1252">
-	<title></title>
-	<style type="text/css">
-		@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=Silkscreen&display=swap');
-		body {
-			font-family: "IBM Plex Mono", monospace;
-			background: #E9E3C6;
-			background-image: url('Ukito-Azuma_files/bg.png');
-		}
+    <title>Ukito Azuma</title>
+    <style type="text/css">
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=Silkscreen&display=swap');
+        body {
+            font-family: "IBM Plex Mono", monospace;
+            background: #E9E3C6;
+            background-image: url('Ukito-Azuma_files/bg.png');
+        }
 
-		.wrapper {
-			border: 3px solid #380D41;
-			width: 615px;
-			height: 385px;
-			box-shadow: 3px 3px 0 #96A99A;
-			background-image: url('Ukito-Azuma_files/consolebg.png');
-			border-radius: 5px;
-			margin: auto;
-			margin-top: calc(50vh - 190px);
-		}
+        .wrapper {
+            border: 3px solid #380D41;
+            width: 615px;
+            height: 385px;
+            box-shadow: 3px 3px 0 #96A99A;
+            background-image: url('Ukito-Azuma_files/consolebg.png');
+            border-radius: 5px;
+            margin: auto;
+            margin-top: calc(50vh - 190px);
+        }
 
-		.wrapper::after {
-			content: " ";
-			display: block;
-			border: 3px solid #380D41;
-			border-top: 0;
-			width: 615px;
-			height: 9px;
-			box-shadow: 3px 3px 0 #96A99A;
-			position: relative;
-			left: -3px;
-			top: -3px;
-			border-radius: 0 0 5px 5px;
-		}
+        .wrapper::after {
+            content: " ";
+            display: block;
+            border: 3px solid #380D41;
+            border-top: 0;
+            width: 615px;
+            height: 9px;
+            box-shadow: 3px 3px 0 #96A99A;
+            position: relative;
+            left: -3px;
+            top: -3px;
+            border-radius: 0 0 5px 5px;
+        }
 
-		.content {
-			background: #536982;
-			border-radius: 5px;
-		}
+        .content {
+            background: #536982;
+            border-radius: 5px;
+        }
 
-		.menu a {
-			font-family: "Silkscreen", sans-serif;
-			border: 3px solid #380D41;
-			border-bottom-color: #536982;
-			color: #380D41;
-			text-decoration: none;
-			display: inline-block;
-			height: 41px;
-			font-size: 13px;
-			width: 128px;
-			margin-left: -3px;
-			border-radius: 3px;
-			line-height: 33px;
-			position: relative;
-		}
+        .menu a {
+            font-family: "Silkscreen", sans-serif;
+            border: 3px solid #380D41;
+            border-bottom-color: #536982;
+            color: #380D41;
+            text-decoration: none;
+            display: inline-block;
+            height: 41px;
+            font-size: 13px;
+            width: 128px;
+            margin-left: -3px;
+            border-radius: 3px;
+            line-height: 33px;
+            position: relative;
+            cursor: pointer;
+        }
 
-		.menu a:hover {
-			position: relative;
-			top: 4px;
-		}
+        .menu a:hover {
+            position: relative;
+            top: 4px;
+        }
 
-		.menu a:hover::before {
-			background-color: #380D41;
-			display: block;
-			content: " " ;
-			height: 6px;
-			width: calc(100% + 6px);
-			position: absolute;
-			top: -7px;
-			left: -3px;
-		}
+        .menu a:hover::before {
+            background-color: #380D41;
+            display: block;
+            content: " " ;
+            height: 6px;
+            width: calc(100% + 6px);
+            position: absolute;
+            top: -7px;
+            left: -3px;
+        }
 
-		.menu a::after {
-			background-color: #96A99A;
-			display: block;
-			content: " " ;
-			height: 3px;
-			width: 90px;
-			margin: auto;
-		}
+        .menu a::after {
+            background-color: #96A99A;
+            display: block;
+            content: " " ;
+            height: 3px;
+            width: 90px;
+            margin: auto;
+        }
 
-		.screen {
-			width: 512px;
-			height: 294px;
-			background: #96A99A;
-			border: 3px solid #380D41;
-			margin: auto;
-			margin-top: 20px;
-			position: relative;
-			border-radius: 5px;
-		}
+        .screen {
+            width: 512px;
+            height: 294px;
+            background: #96A99A;
+            border: 3px solid #380D41;
+            margin: auto;
+            margin-top: 20px;
+            position: relative;
+            border-radius: 5px;
+        }
 
-		iframe {
-			border: 0;
-			width: 100%;
-			height: 100%;
-		}
+        .page-content {
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            padding: 15px;
+            box-sizing: border-box;
+            font-size: 11px;
+            line-height: 1.4;
+        }
 
-		.menu {
-			margin: auto;
-			text-align: center;
-			margin-top: 18px;
-		}
+        .page-content h1 {
+            font-size: 14px;
+            margin-top: 0;
+        }
 
-		.marquee {
-		  overflow: hidden;
-		  display: flex;
-		  line-height: 20px;
-		  position: absolute;
-		  width: 100%;
-		  bottom: -5px;
-		  z-index: 1;
-		}
+        .page-content h2 {
+            font-size: 12px;
+        }
 
-		.marquee span{
-			white-space: nowrap;
-		}
+        .page-content a {
+            color: #380D41;
+        }
 
-		.pipi {
-		  position: absolute;
-		  left: 20px;
-		  bottom: 0;
-		  z-index: 2;
-		}
-	</style>
+        .page-content ul {
+            list-style: none;
+            padding-left: 10px;
+        }
+
+        .page-content img {
+            max-width: 100%;
+        }
+
+        .page-content iframe {
+            border: 0;
+        }
+
+        .page-content .title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .menu {
+            margin: auto;
+            text-align: center;
+            margin-top: 18px;
+        }
+
+        .marquee {
+          overflow: hidden;
+          display: flex;
+          line-height: 20px;
+          position: absolute;
+          width: 100%;
+          bottom: -5px;
+          z-index: 1;
+        }
+
+        .marquee span{
+            white-space: nowrap;
+        }
+
+        .pipi {
+          position: absolute;
+          left: 20px;
+          bottom: 0;
+          z-index: 2;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
 
-	<div class="wrapper">
-		<div class="screen">
-			<iframe name="content" src="Ukito-Azuma_files/home.html"></iframe>
-			<img src="Ukito-Azuma_files/pipi.gif" class="pipi">
-			<div class="marquee">
-				<span style="margin-left: -118.4px;">
-					<img src="Ukito-Azuma_files/mar_1.png">
-					&nbsp;
-					&nbsp;
-					&nbsp;
-					&nbsp;
-					<img src="Ukito-Azuma_files/mar_2.png">
-					<img src="Ukito-Azuma_files/mar_3.png">
-					&nbsp;
-					&nbsp;
-					&nbsp;
-					<img src="Ukito-Azuma_files/mar_4.png">
-					<img src="Ukito-Azuma_files/mar_5.png">
-					&nbsp;
-					&nbsp;
-					&nbsp;
-					<img src="Ukito-Azuma_files/mar_1.png">
-					&nbsp;
-					<img src="Ukito-Azuma_files/mar_2.png">
-					&nbsp;
-					&nbsp;
-					&nbsp;
-					&nbsp;
-					&nbsp;
-					<img src="Ukito-Azuma_files/mar_3.png">
-					&nbsp;
-					&nbsp;
-					<img src="Ukito-Azuma_files/mar_4.png">
-					&nbsp;
-					&nbsp;
-					<img src="Ukito-Azuma_files/mar_5.png">
-				</span>
-			
-				<span>
-					<img src="Ukito-Azuma_files/mar_1.png">
-					&nbsp;
-					&nbsp;
-					&nbsp;
-					&nbsp;
-					<img src="Ukito-Azuma_files/mar_2.png">
-					<img src="Ukito-Azuma_files/mar_3.png">
-					&nbsp;
-					&nbsp;
-					&nbsp;
-					<img src="Ukito-Azuma_files/mar_4.png">
-					<img src="Ukito-Azuma_files/mar_5.png">
-					&nbsp;
-					&nbsp;
-					&nbsp;
-					<img src="Ukito-Azuma_files/mar_1.png">
-					&nbsp;
-					<img src="Ukito-Azuma_files/mar_2.png">
-					&nbsp;
-					&nbsp;
-					&nbsp;
-					&nbsp;
-					&nbsp;
-					<img src="Ukito-Azuma_files/mar_3.png">
-					&nbsp;
-					&nbsp;
-					<img src="Ukito-Azuma_files/mar_4.png">
-					&nbsp;
-					&nbsp;
-					<img src="Ukito-Azuma_files/mar_5.png">
-				</span>
-			
-				<span>
-					<img src="Ukito-Azuma_files/mar_1.png">
-					&nbsp;
-					&nbsp;
-					&nbsp;
-					&nbsp;
-					<img src="Ukito-Azuma_files/mar_2.png">
-					<img src="Ukito-Azuma_files/mar_3.png">
-					&nbsp;
-					&nbsp;
-					&nbsp;
-					<img src="Ukito-Azuma_files/mar_4.png">
-					<img src="Ukito-Azuma_files/mar_5.png">
-					&nbsp;
-					&nbsp;
-					&nbsp;
-					<img src="Ukito-Azuma_files/mar_1.png">
-					&nbsp;
-					<img src="Ukito-Azuma_files/mar_2.png">
-					&nbsp;
-					&nbsp;
-					&nbsp;
-					&nbsp;
-					&nbsp;
-					<img src="Ukito-Azuma_files/mar_3.png">
-					&nbsp;
-					&nbsp;
-					<img src="Ukito-Azuma_files/mar_4.png">
-					&nbsp;
-					&nbsp;
-					<img src="Ukito-Azuma_files/mar_5.png">
-				</span>
-			</div>
-		</div>
-		<div class="subtext"></div>
-		<div class="menu">
-			<a href="Ukito-Azuma_files/home.html" target="content">home</a><a href="Ukito-Azuma_files/blog.html" target="content">music</a><a href="Ukito-Azuma_files/about.html" target="content">gallery</a><a href="Ukito-Azuma_files/links.html" target="content">links</a>
-		</div>
-	</div>
+    <div class="wrapper">
+        <div class="screen">
+            <div class="page-content">
+                <div id="home" class="page">
+                    <div class="title">U. AZUMA</div>
+                    <h1>JP</h1>
+                    <p>Ukito Azuma is a legendary figure in the world of video game music composition. Born in the bustling streets of Tokyo, Japan, Azuma-san's passion for creating mesmerizing soundscapes began at a young age.</p>
+                    <p>During the late 90s, Azuma found himself immersed in the vibrant world of video game development. It was during this time that he crafted some of the most iconic soundtracks for beloved titles such as "Chrono Trigger" and "Final Fantasy VII."</p>
+                    <p>Little did Azuma know, his experimentation with electronic beats and atmospheric melodies was paving the way for a new genre of music - weightless grime. As the 90s drew to a close, Azuma's sound evolved, unknowingly mirroring the emerging elements of grime music that would later be popularized by artists like Wiley.</p>
+                    <p>It wasn't until the early 2000s that Azuma discovered the uncanny resemblance between his compositions and the burgeoning grime scene. Despite being unaware of his influence, Azuma's contributions to the music world were undeniable.</p>
+                    <p>Today, Ukito Azuma continues to push the boundaries of sound, collaborating with avant-garde artists and experimenting with innovative techniques. His latest releases can be found on hâtif's cutting-edge label, where his timeless compositions continue to captivate audiences around the globe.</p>
+                    <ul>
+                        <li>UPDATED 2025</li>
+                    </ul>
+                    <br><br>
+                    <img src="Ukito-Azuma_files/home_data/image.jpg">
+                </div>
 
-	<script type="text/javascript">
-		function Marquee(selector, speed) {
-			const parentSelector = document.querySelector(selector);
-			const clone = parentSelector.innerHTML;
-			const firstElement = parentSelector.children[0];
-			let i = 0;
-			console.log(firstElement);
-			parentSelector.insertAdjacentHTML('beforeend', clone);
-			parentSelector.insertAdjacentHTML('beforeend', clone);
+                <div id="music" class="page hidden">
+                    <h1>music</h1>
+                    <p>Pioneering the weightless grime sound - unreleased video game instrumentals from 1995 compiled on hâtif label. Proto-grime tracks preserving an important legacy.</p>
+                    <br>
+                    <p>Latest release: Totono no tankyū 1995</p>
+                    <iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=3660106950/size=large/bgcol=96A99A/linkcol=380D41/tracklist=false/artwork=small/transparent=true/" seamless></iframe>
+                    <br><br>
+                    <a href="https://s-hatif.bandcamp.com/album/ukito-azuma-totono-no-tanky-1995" target="_blank">→ bandcamp</a><br>
+                    <a href="https://open.spotify.com/artist/3VCIvRKYaQ8fC9ARIjmf24" target="_blank">→ spotify</a>
+                </div>
 
-			setInterval(function () {
-				firstElement.style.marginLeft = `-${i}px`;
-				if (i > firstElement.clientWidth) {
-					i = 0;
-				}
-				i = i + speed;
-			}, 0);
-		}
+                <div id="gallery" class="page hidden">
+                    <h1>gallery</h1>
+                    <img src="Ukito-Azuma_files/home_data/image.jpg">
+                </div>
 
-	//after window is completed load
-	//1 class selector for marquee
-	//2 marquee speed 0.2
-	window.addEventListener('load', Marquee('.marquee', 0.4))
+                <div id="links" class="page hidden">
+                    <h1>links</h1>
+                    <ul>
+                        <li>→ <a href="https://s-hatif.bandcamp.com/album/ukito-azuma-totono-no-tanky-1995" target="_blank">bandcamp</a></li>
+                        <li>→ <a href="https://open.spotify.com/artist/3VCIvRKYaQ8fC9ARIjmf24" target="_blank">spotify</a></li>
+                        <li>→ <a href="https://s-hatif.bandcamp.com" target="_blank">hâtif label</a></li>
+                    </ul>
+                </div>
+            </div>
+            <img src="Ukito-Azuma_files/pipi.gif" class="pipi">
+            <div class="marquee">
+                <span style="margin-left: -118.4px;">
+                    <img src="Ukito-Azuma_files/mar_1.png">
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    <img src="Ukito-Azuma_files/mar_2.png">
+                    <img src="Ukito-Azuma_files/mar_3.png">
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    <img src="Ukito-Azuma_files/mar_4.png">
+                    <img src="Ukito-Azuma_files/mar_5.png">
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    <img src="Ukito-Azuma_files/mar_1.png">
+                    &nbsp;
+                    <img src="Ukito-Azuma_files/mar_2.png">
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    <img src="Ukito-Azuma_files/mar_3.png">
+                    &nbsp;
+                    &nbsp;
+                    <img src="Ukito-Azuma_files/mar_4.png">
+                    &nbsp;
+                    &nbsp;
+                    <img src="Ukito-Azuma_files/mar_5.png">
+                </span>
+            
+                <span>
+                    <img src="Ukito-Azuma_files/mar_1.png">
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    <img src="Ukito-Azuma_files/mar_2.png">
+                    <img src="Ukito-Azuma_files/mar_3.png">
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    <img src="Ukito-Azuma_files/mar_4.png">
+                    <img src="Ukito-Azuma_files/mar_5.png">
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    <img src="Ukito-Azuma_files/mar_1.png">
+                    &nbsp;
+                    <img src="Ukito-Azuma_files/mar_2.png">
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    <img src="Ukito-Azuma_files/mar_3.png">
+                    &nbsp;
+                    &nbsp;
+                    <img src="Ukito-Azuma_files/mar_4.png">
+                    &nbsp;
+                    &nbsp;
+                    <img src="Ukito-Azuma_files/mar_5.png">
+                </span>
+            
+                <span>
+                    <img src="Ukito-Azuma_files/mar_1.png">
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    <img src="Ukito-Azuma_files/mar_2.png">
+                    <img src="Ukito-Azuma_files/mar_3.png">
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    <img src="Ukito-Azuma_files/mar_4.png">
+                    <img src="Ukito-Azuma_files/mar_5.png">
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    <img src="Ukito-Azuma_files/mar_1.png">
+                    &nbsp;
+                    <img src="Ukito-Azuma_files/mar_2.png">
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    <img src="Ukito-Azuma_files/mar_3.png">
+                    &nbsp;
+                    &nbsp;
+                    <img src="Ukito-Azuma_files/mar_4.png">
+                    &nbsp;
+                    &nbsp;
+                    <img src="Ukito-Azuma_files/mar_5.png">
+                </span>
+            </div>
+        </div>
+        <div class="subtext"></div>
+        <div class="menu">
+            <a onclick="showPage('home'); return false;">home</a><a onclick="showPage('music'); return false;">music</a><a onclick="showPage('gallery'); return false;">gallery</a><a onclick="showPage('links'); return false;">links</a>
+        </div>
+    </div>
 
-	</script>
+    <script type="text/javascript">
+        function showPage(pageId) {
+            var pages = document.querySelectorAll('.page');
+            pages.forEach(function(page) {
+                page.classList.add('hidden');
+            });
+            document.getElementById(pageId).classList.remove('hidden');
+        }
+
+        function Marquee(selector, speed) {
+            const parentSelector = document.querySelector(selector);
+            const clone = parentSelector.innerHTML;
+            const firstElement = parentSelector.children[0];
+            let i = 0;
+            parentSelector.insertAdjacentHTML('beforeend', clone);
+            parentSelector.insertAdjacentHTML('beforeend', clone);
+
+            setInterval(function () {
+                firstElement.style.marginLeft = `-${i}px`;
+                if (i > firstElement.clientWidth) {
+                    i = 0;
+                }
+                i = i + speed;
+            }, 0);
+        }
+
+        window.addEventListener('load', Marquee('.marquee', 0.4))
+    </script>
 
 </body></html>

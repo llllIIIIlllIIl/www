@@ -1,126 +1,194 @@
 <!DOCTYPE html>
 <html><head>
 <meta http-equiv="content-type" content="text/html; charset=windows-1252">
-	<title>half righteous</title>
-	<style type="text/css">
-		@import url('https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Kalam:wght@300;400;700&display=swap');
+    <title>half righteous</title>
+    <style type="text/css">
+        @import url('https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Kalam:wght@300;400;700&display=swap');
 
-		html {
-			scrollbar-width: thin;
-		}
-		.content {
-			background-image: url('kr_100_b_by_krossonovo_d4refjj.png');
-			background-size: cover;
-			background-repeat: no-repeat;
-			width: 480px;
-			height: 590px;
-			display: inline-block;
-			position: relative;
-		}
+        html {
+            scrollbar-width: thin;
+        }
+        .content {
+            background-image: url('kr_100_b_by_krossonovo_d4refjj.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            width: 480px;
+            height: 590px;
+            display: inline-block;
+            position: relative;
+        }
 
-		.sidebar {
-			display: inline-block;
-			vertical-align: top;
-		}
+        .sidebar {
+            display: inline-block;
+            vertical-align: top;
+        }
 
-		.bird {
-			width: 120px;
-			margin: 20px;
-		}
+        .bird {
+            width: 120px;
+            margin: 20px;
+        }
 
-		iframe {
-			border: 0;
-			width: 405px;
-			height: 520px;
-			margin: 40px;
-			margin-top: -10px;
+        .page-content {
+            width: 405px;
+            height: 520px;
+            margin: 40px;
+            margin-top: -10px;
+            overflow-y: auto;
+            color: #77675c;
+            font-size: 12px;
+        }
 
-		}
+        .page-content h1 {
+            font-family: "Homemade Apple", sans-serif;
+            font-size: 16px;
+            color: #5b5553;
+        }
 
-		body {
-			background-image: url('metaki_files/bg.png');
-			color: #77675c;
-			font-size: 12px;
+        .page-content h2 {
+            font-family: "Homemade Apple", sans-serif;
+            font-size: 14px;
+            color: #5b5553;
+        }
 
-		}
+        .page-content a {
+            color: #5b5553;
+        }
 
-		.menu {
-			font-family: "Homemade Apple", sans-serif;
-			font-weight: 400;
-			font-style: normal;
-			margin-right: -35px;
-		}
+        .page-content ul {
+            list-style: none;
+            padding-left: 10px;
+        }
 
-		.menu a {
-			color: inherit;
-			text-decoration: none;
-			display: inline-block;
-			color: #5b5553;
-		}
+        .page-content img {
+            max-width: 100%;
+        }
 
-		.menu a:hover {
-			text-decoration: underline;
-		}
+        body {
+            background-image: url('metaki_files/bg.png');
+            color: #77675c;
+            font-size: 12px;
+        }
 
-		.title {
-			font-family: "Homemade Apple", sans-serif;
-			font-size: 14px;
-			color: #77675c;
-			margin-top: 22px;
-			top: -18px;
-			background: #ede8e4;
-			display: inline-block;
-			padding: 0 42px;
-			box-shadow: 0 0 5px #a9a19b;
-			position: relative;
-			border-radius: 4px;
-		}
+        .menu {
+            font-family: "Homemade Apple", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            margin-right: -35px;
+        }
 
-		.wrapper {
-			text-align: center;
-			position: relative;
-			width: 660px;
-			margin: auto;
-			margin-top: 120px;
-		}
+        .menu a {
+            color: inherit;
+            text-decoration: none;
+            display: inline-block;
+            color: #5b5553;
+        }
 
-		.tulips img {
-			width: 40px;
-		}
-		.tulips {
-			position: absolute;
-			bottom: 15px;
-			right: -7px;
-			z-index: -1;
-			opacity: 0.5;
-			filter: sepia(0.5) blur(0.5px);
-		}
+        .menu a:hover {
+            text-decoration: underline;
+        }
 
-	</style>
+        .title {
+            font-family: "Homemade Apple", sans-serif;
+            font-size: 14px;
+            color: #77675c;
+            margin-top: 22px;
+            top: -18px;
+            background: #ede8e4;
+            display: inline-block;
+            padding: 0 42px;
+            box-shadow: 0 0 5px #a9a19b;
+            position: relative;
+            border-radius: 4px;
+        }
+
+        .wrapper {
+            text-align: center;
+            position: relative;
+            width: 660px;
+            margin: auto;
+            margin-top: 120px;
+        }
+
+        .tulips img {
+            width: 40px;
+        }
+        .tulips {
+            position: absolute;
+            bottom: 15px;
+            right: -7px;
+            z-index: -1;
+            opacity: 0.5;
+            filter: sepia(0.5) blur(0.5px);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+    </style>
 </head>
 <body>
 
+    <div class="wrapper">
+        <div class="sidebar">
+            <img src="metaki_files/black_capped_chickadee_png_by_artbykristian_daq9ksn.png" class="bird">
+            <div class="menu">
+                <a href="#" onclick="showPage('home'); return false;">home</a> <br>
+                <a href="#" onclick="showPage('music'); return false;">music</a> <br>
+                <a href="#" onclick="showPage('gallery'); return false;">gallery</a> <br>
+                <a href="#" onclick="showPage('links'); return false;">links</a> <br>
+            </div>
+        </div>
 
-	<div class="wrapper">
-		<div class="sidebar">
-			<img src="metaki_files/black_capped_chickadee_png_by_artbykristian_daq9ksn.png" class="bird">
-			<div class="menu">
-				<a href="metaki_files/home.html" target="content">home</a> <br>
-				<a href="metaki_files/blog.html" target="content">music</a> <br>
-				<a href="metaki_files/about.html" target="content">gallery</a> <br>
-				<a href="metaki_files/links.html" target="content">links</a> <br>
-			</div>
-		</div>
+        <div class="content">
+            <div class="title">half righteous</div>
+            <div class="page-content">
+                <div id="home" class="page">
+                    <h1>perfumethief / metaki / lil rhiz0me</h1>
+                    <p>Artist operating across multiple sonic territories under various aliases. Known for contributions to underground electronic music scenes, with guest mixes featured on Soul Feeder, burenhinder, and HKCR platforms.</p>
+                    <br>
+                    <img src="metaki_files/home_data/gif.gif">
+                    <br>
+                    <h2>sound territories</h2>
+                    <p>The lil rhiz0me moniker appears in various mix series and collaborative projects within experimental electronic music circuits. perfumethief represents the central hub for releases and ongoing work.</p>
+                </div>
 
-		<div class="content">
-			<div class="title">half righteous</div>
-			<iframe name="content" src="metaki_files/home.html"></iframe>
-		</div>
+                <div id="music" class="page hidden">
+                    <h1>music</h1>
+                    <p>Listen on SoundCloud:</p>
+                    <iframe width="100%" height="450" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/perfumethief&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>
+                    <br><br>
+                    <a href="https://soundcloud.com/perfumethief" target="_blank">→ soundcloud.com/perfumethief</a>
+                </div>
 
-		<div class="tulips">
-			<img src="metaki_files/tulips_1_by_margarita_morrigan_d9pq96g-fullview.png">
-		</div>
-	</div>
+                <div id="gallery" class="page hidden">
+                    <h1>gallery</h1>
+                    <img src="metaki_files/home_data/image.jpg">
+                </div>
 
+                <div id="links" class="page hidden">
+                    <h1>links</h1>
+                    <ul>
+                        <li>→ <a href="https://soundcloud.com/perfumethief" target="_blank">perfumethief</a></li>
+                        <li>→ <a href="https://soundcloud.com/gothiclandanxiety" target="_blank">gothiclandanxiety</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="tulips">
+            <img src="metaki_files/tulips_1_by_margarita_morrigan_d9pq96g-fullview.png">
+        </div>
+    </div>
+
+    <script>
+        function showPage(pageId) {
+            var pages = document.querySelectorAll('.page');
+            pages.forEach(function(page) {
+                page.classList.add('hidden');
+            });
+            document.getElementById(pageId).classList.remove('hidden');
+        }
+    </script>
 
 </body></html>

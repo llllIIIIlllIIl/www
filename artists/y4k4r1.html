@@ -1,120 +1,190 @@
 <!DOCTYPE html>
 <html><head>
 <meta http-equiv="content-type" content="text/html; charset=windows-1252">
-	<title>makeshots</title>
-	<style type="text/css">
-		body {
-			background-image: url('y4k4r1_files/bg.png');
-			font-family: Consolas, monospace;
-			margin: 0;
-			padding: 0;
-		}
-		.wrapper {
-			width: 500px;
-			margin: auto;
-			margin-top: 120px;
-		}
-		.content {
-			margin-top: 12px;
-		}
-		.content iframe {
-			width: 100%;
-			height: 290px;
-			border: none;
-			border: 2px solid #000;
-		}
-		.preheader {
-			background: gold;
-			border: 2px solid #000;
-			display: inline-block;
-			padding: 3px 6px;
-		}
-		.title {
-			background: gold;
-			border: 2px solid #000;
-			display: inline-block;
-			font-size: 36px;
-			padding: 3px 6px;
-		}
-		.menu a {
-			background: gold;
-			border: 2px solid #000;
-			display: inline-block;
-			padding: 3px 6px;
-			margin-right: -2px;
-		}
-		.header {
-			position: relative;
-		}
-		.guys {
-			position: absolute;
-			right: 0;
-			top: -4px;
-		}
-		.white-top {
-			color: black;
-			font-size: 11px;
-			width: 300px;
-		}
-		.white-bottom {
-			color: black;
-			font-size: 11px;
-			width: 300px;
-			position: absolute;
-			bottom: 0;
-		}
-		.white-bottom-right {
-			color: black;
-			font-size: 11px;
-			width: 300px;
-			position: absolute;
-			bottom: 0;
-			right: 0;
-			text-align: right;
-		}
-		.menu a {
-			text-transform: lowercase;
-			font-size: 12px;
-			color: blue;
-			text-decoration: none;
-		}
-		.menu a:hover {
-			color: red;
-		}
-	</style>
+    <title>makeshots</title>
+    <style type="text/css">
+        body {
+            background-image: url('y4k4r1_files/bg.png');
+            font-family: Consolas, monospace;
+            margin: 0;
+            padding: 0;
+        }
+        .wrapper {
+            width: 500px;
+            margin: auto;
+            margin-top: 120px;
+        }
+        .content {
+            margin-top: 12px;
+        }
+        .page-content {
+            width: 100%;
+            height: 290px;
+            border: 2px solid #000;
+            overflow-y: auto;
+            padding: 10px;
+            box-sizing: border-box;
+            background: white;
+            font-size: 12px;
+        }
+        .page-content h1 {
+            font-size: 16px;
+            margin-top: 0;
+        }
+        .page-content h2 {
+            font-size: 14px;
+        }
+        .page-content a {
+            color: blue;
+        }
+        .page-content ul {
+            list-style: none;
+            padding-left: 10px;
+        }
+        .page-content img {
+            max-width: 100%;
+        }
+        .page-content iframe {
+            border: 0;
+        }
+        .preheader {
+            background: gold;
+            border: 2px solid #000;
+            display: inline-block;
+            padding: 3px 6px;
+        }
+        .title {
+            background: gold;
+            border: 2px solid #000;
+            display: inline-block;
+            font-size: 36px;
+            padding: 3px 6px;
+        }
+        .menu a {
+            background: gold;
+            border: 2px solid #000;
+            display: inline-block;
+            padding: 3px 6px;
+            margin-right: -2px;
+            text-transform: lowercase;
+            font-size: 12px;
+            color: blue;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .menu a:hover {
+            color: red;
+        }
+        .header {
+            position: relative;
+        }
+        .guys {
+            position: absolute;
+            right: 0;
+            top: -4px;
+        }
+        .white-top {
+            color: black;
+            font-size: 11px;
+            width: 300px;
+        }
+        .white-bottom {
+            color: black;
+            font-size: 11px;
+            width: 300px;
+            position: absolute;
+            bottom: 0;
+        }
+        .white-bottom-right {
+            color: black;
+            font-size: 11px;
+            width: 300px;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            text-align: right;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
 
-	<div class="white-top">
-		consectetur adipisicing elit, sed do eiusmod
-		tempor incididunt ut labore et dolore magna aliqua. 
-	</div>
-	<div class="white-bottom">
-		consectetur adipisicing elit, sed do eiusmod
-		tempor incididunt ut labore et dolore magna aliqua. 
-	</div>
-	<div class="white-bottom-right">
-		consectetur adipisicing elit, sed do eiusmod
-		tempor incididunt ut labore et dolore magna aliqua. 
-	</div>
+    <div class="white-top">
+        consectetur adipisicing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. 
+    </div>
+    <div class="white-bottom">
+        consectetur adipisicing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. 
+    </div>
+    <div class="white-bottom-right">
+        consectetur adipisicing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. 
+    </div>
 
-	<div class="wrapper">
-		<div class="header">
-			<div class="preheader">PRODUCER/DJ, Rustie reborn:</div><br>
-			<div class="title">y4k4r1</div>
-			<div class="menu">
-				<a href="y4k4r1_files/home.html" target="content">Home</a><a href="y4k4r1_files/blog.html" target="content">disco</a><a href="y4k4r1_files/links.html" target="content">about</a>
-			</div>
-			<div class="guys">
-				<img src="y4k4r1_files/guy.png">
-				<img src="y4k4r1_files/guy.png">
-			</div>
-		</div>
+    <div class="wrapper">
+        <div class="header">
+            <div class="preheader">PRODUCER/DJ, Rustie reborn:</div><br>
+            <div class="title">y4k4r1</div>
+            <div class="menu">
+                <a onclick="showPage('home'); return false;">Home</a><a onclick="showPage('disco'); return false;">disco</a><a onclick="showPage('about'); return false;">about</a>
+            </div>
+            <div class="guys">
+                <img src="y4k4r1_files/guy.png">
+                <img src="y4k4r1_files/guy.png">
+            </div>
+        </div>
 
-		<div class="content">
-			<iframe name="content" src="y4k4r1_files/home.html"></iframe>
-		</div>
-	</div>
+        <div class="content">
+            <div class="page-content">
+                <div id="home" class="page">
+                    <h1>y4k4r1</h1>
+                    <p>Netherlands-based virtuoso electronic music producer known for Rustie-inspired hyperactive melodies and overstimulating sound design [web:26]. Genius compositor capable of crafting complex tracks in mere minutes, blending early 2000s nostalgia with cutting-edge production [web:26]. One track licensed for an undisclosed video game project.</p>
+                    <br>
+                    <img src="y4k4r1_files/home_data/gif.gif">
+                    <br>
+                    <h2>production style</h2>
+                    <p>Master of Rustie-style maximalist electronic music—harnessing euphoric trance energy, speaker-mangling bass, and hyperactive club detonators [web:35][web:37]. Produced defining tracks for lil rhiz0me and actively contributes to multiple underground electronic music collectives [web:31].</p>
+                </div>
 
+                <div id="disco" class="page hidden">
+                    <h1>disco</h1>
+                    <p>Listen on SoundCloud:</p>
+                    <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/y4k4r1&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>
+                    <br><br>
+                    <p>Bandcamp releases:</p>
+                    <iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=3423877686/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/" seamless></iframe>
+                    <br><br>
+                    <a href="https://soundcloud.com/y4k4r1" target="_blank">→ soundcloud.com/y4k4r1</a><br>
+                    <a href="https://y4k4r1.bandcamp.com/album/" target="_blank">→ y4k4r1.bandcamp.com</a>
+                </div>
+
+                <div id="about" class="page hidden">
+                    <h1>about</h1>
+                    <p>Netherlands-based electronic music producer operating under the y4k4r1 alias. Virtuoso known for rapid compositional ability and Rustie-influenced maximalist sound design. Key collaborator on lil rhiz0me's best tracks. Active member of multiple electronic music collectives. One track licensed for video game use (undisclosed title).</p>
+                    <br>
+                    <img src="y4k4r1_files/home_data/image.jpg">
+                    <br><br>
+                    <h2>links</h2>
+                    <ul>
+                        <li>→ <a href="https://soundcloud.com/y4k4r1" target="_blank">soundcloud</a></li>
+                        <li>→ <a href="https://y4k4r1.bandcamp.com/album/" target="_blank">bandcamp</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showPage(pageId) {
+            var pages = document.querySelectorAll('.page');
+            pages.forEach(function(page) {
+                page.classList.add('hidden');
+            });
+            document.getElementById(pageId).classList.remove('hidden');
+        }
+    </script>
 
 </body></html>
