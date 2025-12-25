@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Random Moving Images</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .moving-img {
+      position: absolute;
+      width: 120px;
+      height: auto;
+      user-select: none;
+      cursor: pointer;
+      border-radius: 6px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+    }
+  </style>
+</head>
+<body>
+  <script>
+    const totalImages = 50;
+    const stopDuration = 10000; // 10 seconds
+    const paused = new Set();
+    const imgs = [];
+
+    function createImages() {
+      const frag = document.createDocumentFragment();
+
+      for (let i = 1; i <= totalImages; i++) {
+        const img = document.createElement("img");
+        img.src = `UPS_files/${i}.jpg`;
+        img.className = "moving-img";
+        img.id = `img${i}`;
+        img.alt = String(i);
+        frag.appendChild(img);
+      }
+
+      document.body.appendChild(frag);
+    }
+
+    // Initialize positions and velocities
+    function init() {
+      for (let i = 1; i <= totalImages; i++) {
+        const img = document.getElementById("img" + i);
+        if (!img) continue;
+
+        // Random initial position
+        const maxX = window.innerWidth - 140;
+        const maxY = window.innerHeight - 160;
+        const x = Math.random() * (maxX > 0 ? maxX : 0);
+        const y = Math.random() * (maxY > 0 ? maxY : 0);
+
+        img.style.left = x + "px";
+        img.style.top = y + "px";
+
+        // Random velocity between -2.5 and 2.5, not too slow
+        let vx = (Math.random() - 0.5) * 5;
+        let vy = (Math.random() - 0.5) * 5;
+        if (Math.abs(vx) < 0.5) vx = vx < 0 ? -0.5 : 0.5;
+        if (Math.abs(vy) < 0.5) vy = vy < 0 ? -0.5 : 0.5;
+
+        imgs.push({
+          el: img,
+          x,
+          y,
+          vx,
+          vy,
+        });
+
+        img.addEventListener("click", () => {
+          paused.add(img);
+          setTimeout(() => {
+            paused.delete(img);
+          }, stopDuration);
+        });
+      }
+    }
+
+    function animate() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+
+      for (const obj of imgs) {
+        const img = obj.el;
+        if (paused.has(img)) continue;
+
+        obj.x += obj.vx;
+        obj.y += obj.vy;
+
+        const iw = img.offsetWidth || 120;
+        const ih = img.offsetHeight || 120;
+
+        // Bounce on X
+        if (obj.x < 0) {
+          obj.x = 0;
+          obj.vx *= -1;
+        } else if (obj.x + iw > w) {
+          obj.x = w - iw;
+          obj.vx *= -1;
+        }
+
+        // Bounce on Y
+        if (obj.y < 0) {
+          obj.y = 0;
+          obj.vy *= -1;
+        } else if (obj.y + ih > h) {
+          obj.y = h - ih;
+          obj.vy *= -1;
+        }
+
+        img.style.left = obj.x + "px";
+        img.style.top = obj.y + "px";
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener("load", () => {
+      createImages();
+      init();
+      animate();
+    });
+
+    window.addEventListener("resize", () => {
+      // Keep all images inside viewport on resize
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      for (const obj of imgs) {
+        const img = obj.el;
+        const iw = img.offsetWidth || 120;
+        const ih = img.offsetHeight || 120;
+
+        if (obj.x + iw > w) obj.x = w - iw;
+        if (obj.y + ih > h) obj.y = h - ih;
+
+        img.style.left = obj.x + "px";
+        img.style.top = obj.y + "px";
+      }
+    });
+  </script>
+</body>
+</html>
