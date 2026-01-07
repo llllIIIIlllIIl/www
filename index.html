@@ -5,13 +5,124 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIGNIFICATIF MUSIC LABEL</title>
     <script src="./js/winbox.bundle.min.js"></script>
+    <script src="./js/webamp.bundle.min.js"></script>
+    <script>
+        (function() {
+            let overlayShown = false;
+            let audioPlayAttempted = new WeakMap();
+            let trackedAudios = new Set();
+            function showAudioPrompt(audioElement) {
+                if (overlayShown || document.getElementById('audio-enable-overlay')) return;
+                overlayShown = true;
+                const overlay = document.createElement('div');
+                overlay.id = 'audio-enable-overlay';
+                overlay.style = `position:fixed;top:0;left:0;width:100vw;height:100vh;background:#000;color:#fff;z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2em;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;`;
+                overlay.innerHTML = `<h2 style="font-size:1.5em;margin-bottom:1.5em;font-weight:400;letter-spacing:0.05em;">AUDIO BLOCKED</h2><button id="enable-audio-btn" style="font-size:1em;padding:1em 2.5em;background:#fff;color:#000;border:none;cursor:pointer;font-weight:500;letter-spacing:0.1em;transition:all 0.2s;text-transform:uppercase;margin-bottom:2em;">Enable</button><div style="font-size:0.8em;color:#999;max-width:500px;text-align:left;line-height:1.8;font-weight:300;"><p style="margin-bottom:1em;color:#ccc;text-align:center;">For permanent solution:</p><p style="margin-bottom:0.5em;"><strong style="color:#fff;">Chrome:</strong> Click padlock → Site settings → Sound → Allow</p><p style="margin-bottom:0.5em;"><strong style="color:#fff;">Firefox:</strong> Click padlock → Permissions → Autoplay → Allow</p><p style="margin-bottom:0.5em;"><strong style="color:#fff;">Safari:</strong> Right-click address bar → Settings → Auto-Play → Allow</p></div>`;
+                document.body.appendChild(overlay);
+                document.body.style.overflow = "hidden";
+                const btn = document.getElementById('enable-audio-btn');
+                btn.addEventListener('mouseenter', function() { this.style.background = '#ddd'; });
+                btn.addEventListener('mouseleave', function() { this.style.background = '#fff'; });
+                btn.addEventListener('click', function() {
+                    trackedAudios.forEach(audio => { if (audio.paused) { audio.play().catch(() => {}); } });
+                    overlay.remove();
+                    document.body.style.overflow = "";
+                    overlayShown = false;
+                });
+            }
+            const originalAudioConstructor = window.Audio;
+            window.Audio = function(...args) {
+                const audio = new originalAudioConstructor(...args);
+                trackedAudios.add(audio);
+                return audio;
+            };
+            const originalPlay = HTMLMediaElement.prototype.play;
+            HTMLMediaElement.prototype.play = function() {
+                trackedAudios.add(this);
+                audioPlayAttempted.set(this, true);
+                const playPromise = originalPlay.call(this);
+                if (playPromise !== undefined) {
+                    playPromise.catch((error) => {
+                        if (error.name === 'NotAllowedError' || error.name === 'NotSupportedError') {
+                            showAudioPrompt(this);
+                        }
+                    });
+                }
+                return playPromise;
+            };
+            const observer = new MutationObserver(function(mutationsList) {
+                for (const mutation of mutationsList) {
+                    for (const node of mutation.addedNodes) {
+                        if (node.tagName === 'AUDIO') {
+                            trackedAudios.add(node);
+                            if (node.autoplay) {
+                                setTimeout(() => {
+                                    if (node.paused) {
+                                        audioPlayAttempted.set(node, true);
+                                        node.play().catch((error) => {
+                                            if (error.name === 'NotAllowedError' || error.name === 'NotSupportedError') {
+                                                showAudioPrompt(node);
+                                            }
+                                        });
+                                    }
+                                }, 100);
+                            }
+                        } else if (node.querySelectorAll) {
+                            const audios = node.querySelectorAll('audio');
+                            audios.forEach(audio => {
+                                trackedAudios.add(audio);
+                                if (audio.autoplay) {
+                                    setTimeout(() => {
+                                        if (audio.paused) {
+                                            audioPlayAttempted.set(audio, true);
+                                            audio.play().catch((error) => {
+                                                if (error.name === 'NotAllowedError' || error.name === 'NotSupportedError') {
+                                                    showAudioPrompt(audio);
+                                                }
+                                            });
+                                        }
+                                    }, 100);
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+            function checkAutoplayAudios() {
+                const autoplayAudios = document.querySelectorAll('audio[autoplay]');
+                autoplayAudios.forEach(audio => {
+                    trackedAudios.add(audio);
+                    if (audio.paused) {
+                        audioPlayAttempted.set(audio, true);
+                        audio.play().catch((error) => {
+                            if (error.name === 'NotAllowedError' || error.name === 'NotSupportedError') {
+                                showAudioPrompt(audio);
+                            }
+                        });
+                    }
+                });
+            }
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => {
+                    setTimeout(checkAutoplayAudios, 100);
+                    if (document.body) {
+                        observer.observe(document.body, { childList: true, subtree: true });
+                    }
+                });
+            } else {
+                setTimeout(checkAutoplayAudios, 100);
+                if (document.body) {
+                    observer.observe(document.body, { childList: true, subtree: true });
+                }
+            }
+        })();
+    </script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
 
         body {
             background-color: black;
@@ -21,7 +132,6 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-
 
         @font-face {
             font-family: 'Saira-Light';
@@ -36,11 +146,9 @@
             src: url('./fonts/Sporting.otf') format('opentype');
         }
 
-
         .winbox {
             z-index: 5000 !important;
         }
-
 
         #menuToggle {
             position: fixed;
@@ -57,12 +165,10 @@
             transition: background-color 0.3s ease;
         }
 
-
         #menuToggle:hover {
             background-color: white;
             color: black;
         }
-
 
         .button-container {
             position: fixed;
@@ -78,13 +184,11 @@
             transition: transform 0.3s ease, opacity 0.3s ease;
         }
 
-
         .button-container.hidden {
             transform: translateX(-120%);
             opacity: 0;
             pointer-events: none;
         }
-
 
         button {
             background-color: #333;
@@ -98,31 +202,26 @@
             font-size: 14px;
         }
 
-
         button:hover {
             background-color: white;
             color: black;
             font-family: Sporting, Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
         }
 
-
         button.active {
             background-color: white;
             color: black;
         }
 
-
         .window-content {
             padding: 20px;
         }
-
 
         #iframeContent {
             width: 100%;
             height: 100%;
             border: none;
         }
-
 
         .random-words {
             position: fixed;
@@ -137,7 +236,6 @@
             pointer-events: none;
         }
 
-
         .random-word {
             font-family: 'Courier New', Courier, monospace;
             font-size: clamp(16px, 4vw, 24px);
@@ -148,12 +246,10 @@
             white-space: nowrap;
         }
 
-
         .random-word .letter-base {
             display: inline-block;
             width: 1ch;
         }
-
 
         .random-word .letter-dynamic {
             display: inline-block;
@@ -161,7 +257,6 @@
             left: 1ch;
             white-space: nowrap;
         }
-
 
         .prompt-indicator {
             font-family: 'Courier New', Courier, monospace;
@@ -174,12 +269,10 @@
             position: absolute;
         }
 
-
         @keyframes blink {
             0%, 100% { opacity: 0; }
             70%, 99% { opacity: 1; }
         }
-
 
         #significText,
         #hatifText,
@@ -196,7 +289,6 @@
             max-width: 400px;
         }
 
-
         #bandcampLinks button,
         #artExhibitionsContent button {
             display: block;
@@ -206,13 +298,11 @@
             font-size: 12px;
         }
 
-
         #bandcampLinks button:hover,
         #artExhibitionsContent button:hover {
             background-color: #666;
             color: white;
         }
-
 
         #labelDescription {
             font-family: monospace;
@@ -221,7 +311,6 @@
             max-height: 250px;
             overflow-y: auto;
         }
-
 
         #roasterButtons {
             display: none;
@@ -232,29 +321,24 @@
             max-width: 600px;
         }
 
-
         #roasterButtons button {
             width: 100%;
             background-color: #222;
             font-size: 12px;
         }
 
-
         #roasterButtons button:hover {
             background-color: #666;
             color: white;
         }
 
-
         .show {
             display: block !important;
         }
 
-
         .show-grid {
             display: grid !important;
         }
-
 
         .footer {
             position: fixed;
@@ -269,26 +353,22 @@
             letter-spacing: 2px;
         }
 
-
         @media screen and (max-width: 768px) {
             #menuToggle {
                 left: 10px;
                 top: 10px;
             }
 
-
             .button-container {
                 left: 2%;
                 top: 50px;
             }
-
 
             button {
                 padding: 8px 16px;
                 font-size: 12px;
                 width: 130px;
             }
-
 
             #significText,
             #hatifText,
@@ -299,35 +379,29 @@
                 margin-left: 15px;
             }
 
-
             #labelDescription {
                 font-size: 11px;
                 max-height: 180px;
             }
-
 
             #roasterButtons {
                 grid-template-columns: repeat(2, 1fr);
                 max-width: 300px;
             }
 
-
             #roasterButtons button {
                 font-size: 11px;
             }
-
 
             .footer {
                 left: 2%;
                 font-size: 10px;
             }
 
-
             .random-word {
                 font-size: clamp(14px, 3vw, 18px);
             }
         }
-
 
         @media screen and (max-width: 480px) {
             .button-container {
@@ -335,12 +409,10 @@
                 left: 2%;
             }
 
-
             button {
                 width: 120px;
                 padding: 6px 12px;
             }
- 
 
             #significText,
             #hatifText,
@@ -351,23 +423,19 @@
                 max-width: 200px;
             }
 
-
             #roasterButtons {
                 margin-left: 10px;
                 grid-template-columns: repeat(2, 1fr);
                 max-width: 250px;
             }
 
-
             #roasterButtons button {
                 font-size: 10px;
             }
 
-
             .random-words {
                 top: 60%;
             }
-
 
             .footer {
                 left: 50%;
@@ -381,44 +449,34 @@
 <body>
     <button id="menuToggle" onclick="toggleMenu()">☰</button>
 
-
     <div class="button-container" id="menuContainer">
         <button id="significButton" onclick="toggleText('significButton', 'significText')">SIGNIFICATIF</button>
         <div id="significText">
             <div id="labelDescription">
                 Significatif thrives on this juxtaposition, utilizing the very medium associated with mechanization and precision to convey the rich tapestry of human emotions and experiences. While electronic music may inherently possess a certain mechanical quality, Significatif harnesses this characteristic as a canvas upon which to paint intricate layers of meaning, emotion, and humanity.
 
-
 The label recognizes that electronic music, with its precise rhythms and synthesized sounds, offers a unique opportunity for artistic experimentation and expression. Rather than viewing the mechanical nature of electronic production as a limitation, Significatif sees it as a tool for amplifying the depth and complexity of the music it releases.
 
-
 Within the realm of electronic music, Significatif encourages artists to embrace imperfection, allowing human error and spontaneity to shine through amidst the synthesized textures and rhythms. It celebrates the moments where the rigid structure of electronic production is disrupted, giving way to raw, unfiltered expressions of emotion and creativity.
-
 
 In doing so, Significatif challenges the notion that electronic music must adhere to a cold, robotic aesthetic, instead asserting that it can serve as a conduit for deeply human experiences. By infusing electronic compositions with soulful melodies, evocative textures, and thought-provoking themes, Significatif demonstrates that even within the realm of technology-driven music, the human spirit can still shine through with profound clarity and resonance.
             </div>
         </div>
-
 
         <button id="hatifButton" onclick="toggleText('hatifButton', 'hatifText')">hâtif</button>
         <div id="hatifText">
             <div id="labelDescription">
                 "hâtif," the sub-label of Significatif, presents a compelling contrast to its parent label's meticulous and thought-provoking approach. The very name "Hatif" suggests a sense of urgency and spontaneity, emphasizing the idea of sharing things "à la hâte" – quickly and without delay.
 
-
 At its core, Hatif embraces the idea of immediacy and rawness, offering a platform for music that is created impulsively and without the need for extensive refinement. This sub-label is all about capturing the moment, allowing artists to share their creations as they come to fruition, without the constraints of traditional production processes.
-
 
 Unlike Significatif, where every detail is carefully considered and polished to perfection, Hatif embraces imperfection as a fundamental aspect of its aesthetic. There's no pressure for mastering or conventional mixing techniques; instead, the focus is on authenticity and spontaneity.
 
-
 Hatif's releases may vary widely in style and content. Some may carry deep meaning or hidden layers, reflecting the spontaneous expression of the artist's thoughts and emotions in the moment. Others may simply be music made on the go, reflecting the ebb and flow of creative inspiration without the need for extensive deliberation or refinement.
-
 
 In essence, Hatif serves as a dynamic counterpart to Significatif, offering a space for artists to embrace the chaos of creativity and share their music in its purest, most unfiltered form. It's a celebration of artistic freedom and experimentation, where the emphasis is on capturing the raw energy and vitality of the creative process, rather than conforming to established norms or expectations.
             </div>
         </div>
-
 
         <button id="otherLabelsButton" onclick="toggleText('otherLabelsButton', 'otherLabelsText')">Other Labels Distributed</button>
         <div id="otherLabelsText">
@@ -426,7 +484,6 @@ In essence, Hatif serves as a dynamic counterpart to Significatif, offering a sp
                 oxypetals (for metaki), 
             </div>
         </div>
-
 
         <button id="labelRoasterButton" onclick="toggleRoaster()">Label Roaster</button>
         <div id="roasterButtons">
@@ -439,19 +496,16 @@ In essence, Hatif serves as a dynamic counterpart to Significatif, offering a sp
             <button onclick="openWindow('lio-dubois.html')">Lio Dubois</button>
             <button onclick="openWindow('Ukito-Azuma.html')">Ukito Azuma</button>
             <button onclick="openWindow('UPS-Expedited.html')">UPS Expedited</button>
-
-
             <button onclick="openWindow('Sarah-Davenport.html')">Sarah Davenport</button>
         </div>
-
 
         <button id="bandcampButton" onclick="toggleText('bandcampButton', 'bandcampLinks')">Music</button>
         <div id="bandcampLinks">
             <button onclick="window.open('https://music.1113000.xyz', '_blank')">F a i r c a m p</button>
             <button onclick="window.open('https://s-hatif.bandcamp.com/', '_blank')">bandcamp ｈ â ｔ ｉ ｆ</button>
             <button onclick="window.open('https://significatif.bandcamp.com/', '_blank')">bandcamp ｓ ｉ ｇ ｎ ｉ ｆ ｉ ｃ ａ ｔ ｉ ｆ</button>
+            <button onclick="openWebampPlayer()">W i n a m p  P l a y e r</button>
         </div>
-
 
         <button id="artExhibitionsButton" onclick="toggleText('artExhibitionsButton', 'artExhibitionsContent')">Art Exhibitions</button>
         <div id="artExhibitionsContent">
@@ -459,13 +513,8 @@ In essence, Hatif serves as a dynamic counterpart to Significatif, offering a sp
             <button onclick="openWindow('exhibition-2.html')">Exhibition 2</button>
             <button onclick="openWindow('exhibition-3.html')">Exhibition 3</button>
         </div>
-
-
-        <button onclick="location.href='mailto:contact@1113000.xyz';">Contact</button>
-        
         <button onclick="openChatWindow()">Unmonitored Live Chat</button>
     </div>
-
 
     <div id="randomWords" class="random-words">
         <div class="random-word" id="letterS"><span class="letter-base">S</span><span class="letter-dynamic"></span></div>
@@ -482,16 +531,92 @@ In essence, Hatif serves as a dynamic counterpart to Significatif, offering a sp
         <div class="random-word" id="letterF2"><span class="letter-base">F</span><span class="letter-dynamic"></span></div>
     </div>
 
-
     <div class="footer">© SIGNIFICATIF 2025 -  some art by <a href="https://coco.lat/" target="_blank">zac</a> - lio's 3d env idea by <a href="https://names.fm/" target="_blank">Names</a> - hosted by <a href="https://1113000.xyz" target="_blank">1113000.xyz network</a></div>
 
-
     <script>
+        let webampInstance = null;
+        let hasUsedPlayer = false;
+
+        const albumTracks = {
+            "Sarah Davenport - À la mémoire de Sarah Davenport": {
+                cover: "/discographie/Sarah Davenport - À la mémoire de Sarah Davenport/cover.jpg",
+                tracks: [
+                    { title: "01 - Carte Bleue.mp3", path: "/discographie/Sarah Davenport - À la mémoire de Sarah Davenport/01 - Carte Bleue.mp3", artist: "Sarah Davenport" },
+                    { title: "02 - Copie.mp3", path: "/discographie/Sarah Davenport - À la mémoire de Sarah Davenport/02 - Copie.mp3", artist: "Sarah Davenport" },
+                    { title: "03 - Quelqu'un peut-être.mp3", path: "/discographie/Sarah Davenport - À la mémoire de Sarah Davenport/03 - Quelqu'un peut-être.mp3", artist: "Sarah Davenport" },
+                    { title: "04 - HP3.mp3", path: "/discographie/Sarah Davenport - À la mémoire de Sarah Davenport/04 - HP3.mp3", artist: "Sarah Davenport" },
+                    { title: "05 - Riddim.mp3", path: "/discographie/Sarah Davenport - À la mémoire de Sarah Davenport/05 - Riddim.mp3", artist: "Sarah Davenport" },
+                    { title: "06 - Random.mp3", path: "/discographie/Sarah Davenport - À la mémoire de Sarah Davenport/06 - Random.mp3", artist: "Sarah Davenport" },
+                    { title: "07 - Trail.mp3", path: "/discographie/Sarah Davenport - À la mémoire de Sarah Davenport/07 - Trail.mp3", artist: "Sarah Davenport" },
+                    { title: "08 - Cyberdémon deux.mp3", path: "/discographie/Sarah Davenport - À la mémoire de Sarah Davenport/08 - Cyberdémon deux.mp3", artist: "Sarah Davenport" },
+                    { title: "09 - Instru 3.mp3", path: "/discographie/Sarah Davenport - À la mémoire de Sarah Davenport/09 - Instru 3.mp3", artist: "Sarah Davenport" },
+                    { title: "10 - Réalité (feat. dvstrr).mp3", path: "/discographie/Sarah Davenport - À la mémoire de Sarah Davenport/10 - Réalité (feat. dvstrr).mp3", artist: "Sarah Davenport" }
+                ]
+            },
+            "noqwes - Torpeur - Rêve": {
+                cover: "/discographie/noqwes - Torpeur - Rêve/cover.jpg",
+                tracks: [
+                    { title: "Noqwes - Torpeur - Rêve - 01 Torpeur.mp3", path: "/discographie/noqwes - Torpeur - Rêve/Noqwes - Torpeur - Rêve - 01 Torpeur.mp3", artist: "noqwes" },
+                    { title: "Noqwes - Torpeur - Rêve - 02 Rêve.mp3", path: "/discographie/noqwes - Torpeur - Rêve/Noqwes - Torpeur - Rêve - 02 Rêve.mp3", artist: "noqwes" }
+                ]
+            },
+            "noqwes - WWUinNTRP - CD2 Mus": {
+                cover: "/discographie/noqwes - WWUinNTRP - CD2 Mus/cover.jpg",
+                tracks: [
+                    { title: "Noqwes - WWUinNTRP - CD2 Mus - 01 aucunemotiv.mp3", path: "/discographie/noqwes - WWUinNTRP - CD2 Mus/Noqwes - WWUinNTRP - CD2 Mus - 01 aucunemotiv.mp3", artist: "noqwes" },
+                    { title: "Noqwes - WWUinNTRP - CD2 Mus - 02 flemmardise2.mp3", path: "/discographie/noqwes - WWUinNTRP - CD2 Mus/Noqwes - WWUinNTRP - CD2 Mus - 02 flemmardise2.mp3", artist: "noqwes" },
+                    { title: "Noqwes - WWUinNTRP - CD2 Mus - 03 12min2-3.mp3", path: "/discographie/noqwes - WWUinNTRP - CD2 Mus/Noqwes - WWUinNTRP - CD2 Mus - 03 12min2-3.mp3", artist: "noqwes" },
+                    { title: "Noqwes - WWUinNTRP - CD2 Mus - 04 Cyperpunk2.mp3", path: "/discographie/noqwes - WWUinNTRP - CD2 Mus/Noqwes - WWUinNTRP - CD2 Mus - 04 Cyperpunk2.mp3", artist: "noqwes" },
+                    { title: "Noqwes - WWUinNTRP - CD2 Mus - 05 Entropie.mp3", path: "/discographie/noqwes - WWUinNTRP - CD2 Mus/Noqwes - WWUinNTRP - CD2 Mus - 05 Entropie.mp3", artist: "noqwes" },
+                    { title: "Noqwes - WWUinNTRP - CD2 Mus - 06 burial.mp3", path: "/discographie/noqwes - WWUinNTRP - CD2 Mus/Noqwes - WWUinNTRP - CD2 Mus - 06 burial.mp3", artist: "noqwes" },
+                    { title: "Noqwes - WWUinNTRP - CD2 Mus - 07 dimanche.mp3", path: "/discographie/noqwes - WWUinNTRP - CD2 Mus/Noqwes - WWUinNTRP - CD2 Mus - 07 dimanche.mp3", artist: "noqwes" },
+                    { title: "Noqwes - WWUinNTRP - CD2 Mus - 08 Fléau2.mp3", path: "/discographie/noqwes - WWUinNTRP - CD2 Mus/Noqwes - WWUinNTRP - CD2 Mus - 08 Fléau2.mp3", artist: "noqwes" },
+                    { title: "Noqwes - WWUinNTRP - CD2 Mus - 09 ross ross2.mp3", path: "/discographie/noqwes - WWUinNTRP - CD2 Mus/Noqwes - WWUinNTRP - CD2 Mus - 09 ross ross2.mp3", artist: "noqwes" },
+                    { title: "Noqwes - WWUinNTRP - CD2 Mus - 10 arpanet.mp3", path: "/discographie/noqwes - WWUinNTRP - CD2 Mus/Noqwes - WWUinNTRP - CD2 Mus - 10 arpanet.mp3", artist: "noqwes" },
+                    { title: "Noqwes - WWUinNTRP - CD2 Mus - 11 nightonearth.mp3", path: "/discographie/noqwes - WWUinNTRP - CD2 Mus/Noqwes - WWUinNTRP - CD2 Mus - 11 nightonearth.mp3", artist: "noqwes" },
+                    { title: "Noqwes - WWUinNTRP - CD2 Mus - 12 ow wright-old (Japan dolphin bonus).mp3", path: "/discographie/noqwes - WWUinNTRP - CD2 Mus/Noqwes - WWUinNTRP - CD2 Mus - 12 ow wright-old (Japan dolphin bonus).mp3", artist: "noqwes" }
+                ]
+            }
+        };
+
+        function openWebampPlayer() {
+            const album = albumTracks["Sarah Davenport - À la mémoire de Sarah Davenport"];
+            const tracks = album.tracks.map(track => ({
+                metaData: { artist: track.artist, title: track.title },
+                url: track.path,
+                duration: 180
+            }));
+
+            new WinBox({
+                title: "Winamp Player",
+                background: '#525252',
+                border: 2,
+                x: 'center',
+                y: 'center',
+                width: '600px',
+                height: '500px',
+                html: '<div id="webamp-container" style="width:100%;height:100%;"></div>',
+                onclose: function() {
+                    if (webampInstance) {
+                        webampInstance.dispose();
+                        webampInstance = null;
+                    }
+                }
+            });
+
+            setTimeout(() => {
+                const container = document.querySelector('#webamp-container');
+                if (container && !webampInstance) {
+                    webampInstance = new Webamp({ initialTracks: tracks });
+                    webampInstance.renderWhenReady(container);
+                }
+            }, 100);
+        }
+
         function toggleMenu() {
             const menu = document.getElementById('menuContainer');
             menu.classList.toggle('hidden');
         }
-
 
         function closeAllMenus() {
             const allContentDivs = [
@@ -503,20 +628,16 @@ In essence, Hatif serves as a dynamic counterpart to Significatif, offering a sp
                 'bandcampButton', 'artExhibitionsButton', 'labelRoasterButton'
             ];
 
-
             allContentDivs.forEach(id => {
                 document.getElementById(id).classList.remove('show');
             });
 
-
             document.getElementById('roasterButtons').classList.remove('show-grid');
-
 
             allButtons.forEach(id => {
                 document.getElementById(id).classList.remove('active');
             });
         }
-
 
         function openWindow(htmlFileName) {
             new WinBox({
@@ -528,7 +649,6 @@ In essence, Hatif serves as a dynamic counterpart to Significatif, offering a sp
                 url: './artists/' + htmlFileName
             });
         }
-
 
         function openChatWindow() {
             new WinBox({
@@ -543,7 +663,6 @@ In essence, Hatif serves as a dynamic counterpart to Significatif, offering a sp
             });
         }
 
-
         function toggleRoaster() {
             const roasterButtons = document.getElementById("roasterButtons");
             const button = document.getElementById("labelRoasterButton");
@@ -557,11 +676,9 @@ In essence, Hatif serves as a dynamic counterpart to Significatif, offering a sp
             }
         }
 
-
         function toggleText(buttonId, textId) {
             const buttonText = document.getElementById(buttonId);
             const textContent = document.getElementById(textId);
-
 
             if (textContent.classList.contains('show')) {
                 closeAllMenus();
@@ -571,7 +688,6 @@ In essence, Hatif serves as a dynamic counterpart to Significatif, offering a sp
                 buttonText.classList.add('active');
             }
         }
-
 
         const wordLists = {
             S: ["Sonic", "Synthesis", "Sublime", "Surreal", "Serendipity", "Spectral", "Shifting", "Subversive"],
@@ -588,13 +704,11 @@ In essence, Hatif serves as a dynamic counterpart to Significatif, offering a sp
             F2: ["Fringe", "Fluctuating", "Fusion", "Flowing", "Formless", "Flickering", "Fragmented", "Feral"],
         };
 
-
         function getRandomWord(letter) {
             const words = wordLists[letter];
             const randomIndex = Math.floor(Math.random() * words.length);
             return words[randomIndex];
         }
-
 
         function initializeWordWidths() {
             const words = ['S', 'I', 'G', 'N', 'I2', 'F', 'I3', 'C', 'A', 'T', 'I4', 'F2'];
@@ -611,7 +725,6 @@ In essence, Hatif serves as a dynamic counterpart to Significatif, offering a sp
             });
         }
 
-
         function updateWord(letter) {
             const wordElement = document.getElementById(`letter${letter}`);
             const dynamicSpan = wordElement.querySelector('.letter-dynamic');
@@ -620,10 +733,8 @@ In essence, Hatif serves as a dynamic counterpart to Significatif, offering a sp
             
             const currentDynamic = dynamicSpan.textContent;
 
-
             const deleteInterval = 100;
             let index = currentDynamic.length;
-
 
             const deleteIntervalId = setInterval(() => {
                 if (index > 0) {
@@ -640,11 +751,9 @@ In essence, Hatif serves as a dynamic counterpart to Significatif, offering a sp
                 } else {
                     clearInterval(deleteIntervalId);
 
-
                     const newWord = getRandomWord(letter);
                     const dynamicPart = newWord.substring(1);
                     const typeInterval = 100;
-
 
                     let newIndex = 0;
                     const typeIntervalId = setInterval(() => {
@@ -656,7 +765,6 @@ In essence, Hatif serves as a dynamic counterpart to Significatif, offering a sp
                         }
                         newIndex++;
 
-
                         if (newIndex === dynamicPart.length) {
                             clearInterval(typeIntervalId);
                         }
@@ -665,13 +773,11 @@ In essence, Hatif serves as a dynamic counterpart to Significatif, offering a sp
             }, deleteInterval);
         }
 
-
         function updateRandomWord(letter) {
             setInterval(() => {
                 updateWord(letter);
             }, Math.floor(Math.random() * (30000 - 5000 + 1) + 5000));
         }
-
 
         setTimeout(() => {
             initializeWordWidths();
@@ -679,7 +785,6 @@ In essence, Hatif serves as a dynamic counterpart to Significatif, offering a sp
             words.forEach((word, index) => {
                 setTimeout(() => updateWord(word), index * 1000);
             });
-
 
             words.forEach(word => {
                 updateRandomWord(word);
