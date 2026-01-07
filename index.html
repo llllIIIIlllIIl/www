@@ -504,7 +504,6 @@ In essence, Hatif serves as a dynamic counterpart to Significatif, offering a sp
             <button onclick="window.open('https://music.1113000.xyz', '_blank')">F a i r c a m p</button>
             <button onclick="window.open('https://s-hatif.bandcamp.com/', '_blank')">bandcamp ｈ â ｔ ｉ ｆ</button>
             <button onclick="window.open('https://significatif.bandcamp.com/', '_blank')">bandcamp ｓ ｉ ｇ ｎ ｉ ｆ ｉ ｃ ａ ｔ ｉ ｆ</button>
-            <button onclick="openWebampPlayer()">W i n a m p  P l a y e r</button>
         </div>
 
         <button id="artExhibitionsButton" onclick="toggleText('artExhibitionsButton', 'artExhibitionsContent')">Art Exhibitions</button>
@@ -535,7 +534,6 @@ In essence, Hatif serves as a dynamic counterpart to Significatif, offering a sp
 
     <script>
         let webampInstance = null;
-        let hasUsedPlayer = false;
 
         const albumTracks = {
             "Sarah Davenport - À la mémoire de Sarah Davenport": {
@@ -553,41 +551,6 @@ In essence, Hatif serves as a dynamic counterpart to Significatif, offering a sp
                     { title: "10 - Réalité (feat. dvstrr).mp3", path: "/discographie/Sarah Davenport - À la mémoire de Sarah Davenport/10 - Réalité (feat. dvstrr).mp3", artist: "Sarah Davenport" }
                 ]
             }
-        };
-
-        function openWebampPlayer() {
-            const album = albumTracks["Sarah Davenport - À la mémoire de Sarah Davenport"];
-            const tracks = album.tracks.map(track => ({
-                metaData: { artist: track.artist, title: track.title },
-                url: track.path,
-                duration: 180
-            }));
-
-            new WinBox({
-                title: "Winamp Player",
-                background: '#525252',
-                border: 2,
-                x: 'center',
-                y: 'center',
-                width: '600px',
-                height: '500px',
-                html: '<div id="webamp-container" style="width:100%;height:100%;"></div>',
-                onclose: function() {
-                    if (webampInstance) {
-                        webampInstance.dispose();
-                        webampInstance = null;
-                    }
-                }
-            });
-
-            setTimeout(() => {
-                const container = document.querySelector('#webamp-container');
-                if (container && !webampInstance) {
-                    webampInstance = new Webamp({ initialTracks: tracks });
-                    webampInstance.renderWhenReady(container);
-                }
-            }, 100);
-        }
 
         function toggleMenu() {
             const menu = document.getElementById('menuContainer');
@@ -637,6 +600,38 @@ In essence, Hatif serves as a dynamic counterpart to Significatif, offering a sp
                 height: '620px',
                 url: 'https://messenger.1113000.xyz'
             });
+
+            const album = albumTracks["Sarah Davenport - À la mémoire de Sarah Davenport"];
+            const tracks = album.tracks.map(track => ({
+                metaData: { artist: track.artist, title: track.title },
+                url: track.path,
+                duration: 180
+            }));
+
+            new WinBox({
+                title: "Winamp Player",
+                background: '#525252',
+                border: 2,
+                x: 'right',
+                y: 'bottom',
+                width: '600px',
+                height: '500px',
+                html: '<div id="webamp-container" style="width:100%;height:100%;"></div>',
+                onclose: function() {
+                    if (webampInstance) {
+                        webampInstance.dispose();
+                        webampInstance = null;
+                    }
+                }
+            });
+
+            setTimeout(() => {
+                const container = document.querySelector('#webamp-container');
+                if (container && !webampInstance) {
+                    webampInstance = new Webamp({ initialTracks: tracks });
+                    webampInstance.renderWhenReady(container);
+                }
+            }, 200);
         }
 
         function toggleRoaster() {
