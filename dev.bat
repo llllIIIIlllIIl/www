@@ -1,0 +1,1 @@
+"C:\Program Portable\server\php\php-8.5.0-min\php.exe" -S localhost:8000 -t .

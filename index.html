@@ -512,7 +512,7 @@ In essence, Hatif serves as a dynamic counterpart to Significatif, offering a sp
             <button onclick="openWindow('exhibition-2.html')">Exhibition 2</button>
             <button onclick="openWindow('exhibition-3.html')">Exhibition 3</button>
         </div>
-        <button onclick="openChatWindow()">Unmonitored Live Chat</button>
+        <button onclick="openWebampPlayer()" onclick="openChatWindow()">Unmonitored Live Chat</button>
     </div>
 
     <div id="randomWords" class="random-words">
@@ -534,6 +534,7 @@ In essence, Hatif serves as a dynamic counterpart to Significatif, offering a sp
 
     <script>
         let webampInstance = null;
+        let hasUsedPlayer = false;
 
         const albumTracks = {
             "Sarah Davenport - À la mémoire de Sarah Davenport": {
@@ -551,6 +552,41 @@ In essence, Hatif serves as a dynamic counterpart to Significatif, offering a sp
                     { title: "10 - Réalité (feat. dvstrr).mp3", path: "/discographie/Sarah Davenport - À la mémoire de Sarah Davenport/10 - Réalité (feat. dvstrr).mp3", artist: "Sarah Davenport" }
                 ]
             }
+        };
+
+        function openWebampPlayer() {
+            const album = albumTracks["Sarah Davenport - À la mémoire de Sarah Davenport"];
+            const tracks = album.tracks.map(track => ({
+                metaData: { artist: track.artist, title: track.title },
+                url: track.path,
+                duration: 180
+            }));
+
+            new WinBox({
+                title: "Winamp Player",
+                background: '#525252',
+                border: 2,
+                x: 'center',
+                y: 'center',
+                width: '600px',
+                height: '500px',
+                html: '<div id="webamp-container" style="width:100%;height:100%;"></div>',
+                onclose: function() {
+                    if (webampInstance) {
+                        webampInstance.dispose();
+                        webampInstance = null;
+                    }
+                }
+            });
+
+            setTimeout(() => {
+                const container = document.querySelector('#webamp-container');
+                if (container && !webampInstance) {
+                    webampInstance = new Webamp({ initialTracks: tracks });
+                    webampInstance.renderWhenReady(container);
+                }
+            }, 100);
+        }
 
         function toggleMenu() {
             const menu = document.getElementById('menuContainer');
@@ -600,38 +636,6 @@ In essence, Hatif serves as a dynamic counterpart to Significatif, offering a sp
                 height: '620px',
                 url: 'https://messenger.1113000.xyz'
             });
-
-            const album = albumTracks["Sarah Davenport - À la mémoire de Sarah Davenport"];
-            const tracks = album.tracks.map(track => ({
-                metaData: { artist: track.artist, title: track.title },
-                url: track.path,
-                duration: 180
-            }));
-
-            new WinBox({
-                title: "Winamp Player",
-                background: '#525252',
-                border: 2,
-                x: 'right',
-                y: 'bottom',
-                width: '600px',
-                height: '500px',
-                html: '<div id="webamp-container" style="width:100%;height:100%;"></div>',
-                onclose: function() {
-                    if (webampInstance) {
-                        webampInstance.dispose();
-                        webampInstance = null;
-                    }
-                }
-            });
-
-            setTimeout(() => {
-                const container = document.querySelector('#webamp-container');
-                if (container && !webampInstance) {
-                    webampInstance = new Webamp({ initialTracks: tracks });
-                    webampInstance.renderWhenReady(container);
-                }
-            }, 200);
         }
 
         function toggleRoaster() {
